@@ -1,0 +1,27 @@
+export const ROOT_STACK = {
+  MAIN_APP: 'MAIN_APP',
+  GLOBAL_ALERT: 'GLOBAL_ALERT',
+  GLOBAL_CONFIRM: 'GLOBAL_CONFIRM',
+}
+
+export const SCREEN_ROUTER = {
+  MAIN: 'MAIN',
+  AUTH: 'AUTH',
+  SPLASH: 'SPLASH',
+}
+
+export const MAIN_TAB = {
+  HOME: 'HOME',
+  WORK: 'WORK',
+  ACCOUNT: 'ACCOUNT',
+}
+
+export const SCREEN_ROUTER_AUTH = {
+  SPLASH: 'SPLASH',
+  LOGIN: 'LOGIN',
+}
+
+export const SCREEN_ROUTER_APP = {
+  HOME: 'HOME',
+  TEST: 'TEST',
+}

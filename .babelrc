@@ -1,0 +1,24 @@
+{
+  "plugins": [
+    [
+      "module-resolver",
+      {
+        "root": ["./"],
+        "alias": {
+          "@app": "./app",
+          "@screens/*": "./app/screens/*",
+          "@config": "./app/config",
+          "@R": "./app/assets/R.ts",
+          "@theme": "./app/theme",
+          "@navigation": "./app/navigation",
+          "@components": "./app/components",
+          "@services": "./app/services",
+          "@utils": "./app/utils",
+          "@assets": "./app/assets",
+          "@hooks": "./app/hooks",
+          "@store": "./app/store"
+        }
+      }
+    ]
+  ]
+}
