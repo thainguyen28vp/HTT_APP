@@ -7,6 +7,9 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     paddingHorizontal: 20,
   },
+  body: {
+    padding: 20,
+  },
   logo: {
     width: WIDTH * 0.35,
     height: WIDTH * 0.35,

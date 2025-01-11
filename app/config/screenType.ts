@@ -19,9 +19,11 @@ export const MAIN_TAB = {
 export const SCREEN_ROUTER_AUTH = {
   SPLASH: 'SPLASH',
   LOGIN: 'LOGIN',
+  REGISTER: 'REGISTER',
 }
 
 export const SCREEN_ROUTER_APP = {
   HOME: 'HOME',
   TEST: 'TEST',
+  UPDATE_INFO: 'UPDATE_INFO',
 }

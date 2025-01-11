@@ -12,8 +12,11 @@ import Animated, {
   withTiming,
 } from 'react-native-reanimated'
 
-const ButtonCustom = ({ onPress, ...props }: TouchableOpacityProps) => {
+const ButtonCustom = ({ onPress, style, ...props }: TouchableOpacityProps) => {
   const scale = useSharedValue(1)
+  const AnimatedTouchableOpacity =
+    Animated.createAnimatedComponent(TouchableOpacity)
+
   const debouncedOnPress = (e: GestureResponderEvent) => {
     onPress && onPress(e)
   }
@@ -26,19 +29,18 @@ const ButtonCustom = ({ onPress, ...props }: TouchableOpacityProps) => {
   })
 
   return (
-    <TouchableOpacity
+    <AnimatedTouchableOpacity
+      style={[style, animatedStyle]}
       activeOpacity={0.8}
       {...props}
       onPress={onPressAction}
       onPressIn={() => {
-        scale.value = withTiming(0.95, { duration: 150 })
+        scale.value = withTiming(0.98, { duration: 150 })
       }}
       onPressOut={() => {
         scale.value = withTiming(1, { duration: 150 })
       }}
-      children={
-        <Animated.View style={[animatedStyle]}>{props.children}</Animated.View>
-      }
+      children={props.children}
     />
   )
 }

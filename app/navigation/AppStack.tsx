@@ -8,18 +8,22 @@ import { SCREEN_ROUTER_AUTH, SCREEN_ROUTER_APP } from '@app/config/screenType'
 import LoginScreen from '@app/screens/Auth/login/LoginScreen'
 import SplashScreen from '@app/screens/SplashScreen'
 import Test from '@app/screens/Test'
+import RegisterScreen from '@app/screens/Auth/register/RegisterScreen'
+import AccountInfoScreen from '@app/screens/App/account/AccountInfoScreen'
 
-const { SPLASH, LOGIN } = SCREEN_ROUTER_AUTH
-const { HOME, TEST } = SCREEN_ROUTER_APP
+const { SPLASH, LOGIN, REGISTER } = SCREEN_ROUTER_AUTH
+const { HOME, TEST, UPDATE_INFO } = SCREEN_ROUTER_APP
 
 const AUTH_STACK = {
   [SPLASH]: SplashScreen,
   [LOGIN]: LoginScreen,
+  [REGISTER]: RegisterScreen,
 }
 
 const APP_STACK = {
   [HOME]: HomeScreen,
   [TEST]: Test,
+  [UPDATE_INFO]: AccountInfoScreen,
 }
 
 const forFade = ({ current }: StackCardInterpolationProps) => ({

@@ -15,6 +15,7 @@ import styles from './styles'
 import FastImage from '@d11/react-native-fast-image'
 import { showConfirm } from '@app/utils/GlobalAlertHelper'
 import NavigationUtil from '../NavigationUtil'
+import AsyncStorageService from '@app/service/AsyncStorage/AsyncStorageService'
 
 const { HOME, ACCOUNT, WORK } = MAIN_TAB
 
@@ -45,6 +46,7 @@ const Tabs = () => {
   return (
     <Tab.Navigator
       screenOptions={({ navigation, route }) => ({
+        headerShown: false,
         tabBarIcon: ({ focused }) => {
           const tintColor = focused ? '#F68C20' : '#A5A7AB'
           return (
@@ -77,11 +79,8 @@ const Tabs = () => {
             <TouchableOpacity
               {...(props as TouchableOpacityProps)}
               onPress={async e => {
-                // const token = await AsyncStorageService.getToken()
-                if (
-                  route.name != MAIN_TAB.HOME
-                  // check xemfalse login chua
-                ) {
+                const token = await AsyncStorageService.getToken()
+                if (route.name != MAIN_TAB.HOME && !token) {
                   showConfirm(
                     R.strings().noti,
                     R.strings().require_login_message,

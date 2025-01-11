@@ -3,12 +3,16 @@ import React from 'react'
 import { SafeAreaProvider } from 'react-native-safe-area-context'
 import AppNavigator from '@app/navigation/AppNavigator'
 import { RootSiblingParent } from 'react-native-root-siblings'
+import { Provider } from 'react-redux'
+import store from '@app/redux/store'
 
 const AppContainer = () => {
   return (
     <SafeAreaProvider>
       <RootSiblingParent>
-        <AppNavigator />
+        <Provider store={store}>
+          <AppNavigator />
+        </Provider>
       </RootSiblingParent>
     </SafeAreaProvider>
   )

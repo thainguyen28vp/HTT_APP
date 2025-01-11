@@ -60,6 +60,7 @@ export const colors = {
     light: '#787B82',
     lighter: '#637381',
     lightest: '#919EAB',
+    gray: '#4B4F58',
   },
 }
 

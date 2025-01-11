@@ -7,18 +7,33 @@ import {
 } from '@app/config/screenType'
 import FastImage from '@d11/react-native-fast-image'
 import R from '@R'
+import AsyncStorageService from '@app/service/AsyncStorage/AsyncStorageService'
 
 const SplashScreen = (props: any) => {
   useEffect(() => {
     setTimeout(() => {
+      checkLogin()
+    }, 1000)
+  }, [])
+  const checkLogin = async () => {
+    const token = (await AsyncStorageService.getToken()) || ''
+    if (!token) {
       props.navigation.reset({
         index: 0,
         routes: [{ name: SCREEN_ROUTER_AUTH.LOGIN }],
         // routes: [{ name: SCREEN_ROUTER_APP.TEST }],
         // routes: [{ name: SCREEN_ROUTER.MAIN }],
       })
-    }, 1000)
-  }, [])
+    } else {
+      props.navigation.reset({
+        index: 0,
+        // routes: [{ name: SCREEN_ROUTER_AUTH.LOGIN }],
+        // routes: [{ name: SCREEN_ROUTER_APP.TEST }],
+        routes: [{ name: SCREEN_ROUTER.MAIN }],
+      })
+    }
+  }
+
   return (
     <SafeAreaView style={styles.flex}>
       <FastImage source={R.images.logo} style={styles.logo} />

@@ -26,7 +26,7 @@ const ModalAlert = (props: Props) => {
   const title = params?.title || R.strings().noti
   const content = params?.content
   const action = params?.action
-  const text = params?.text || 'Ok'
+  const text = params?.text || R.strings().yes
   return (
     <View style={styles.wrapper}>
       <View style={styles.container}>
@@ -40,7 +40,17 @@ const ModalAlert = (props: Props) => {
           children={
             <View
               style={styles.btn}
-              children={<Text style={{ color: colors.white }}>{text}</Text>}
+              children={
+                <Text
+                  style={{
+                    color: colors.white,
+                    textAlign: 'center',
+                    fontSize: 16,
+                  }}
+                >
+                  {text}
+                </Text>
+              }
             />
           }
         />
@@ -68,17 +78,19 @@ const styles = StyleSheet.create({
   },
   btn: {
     // ...styleView.centerItem,
+    justifyContent: 'center',
+    alignItems: 'center',
     width: width - 80,
     height: 40,
     backgroundColor: colors.primary,
     borderRadius: 8,
   },
-  title: { color: colors.text.primary },
+  title: { color: colors.text.primary, textAlign: 'center', fontSize: 16 },
   description: {
-    // ...fonts.regular16,
+    textAlign: 'center',
     marginVertical: 20,
     color: colors.text.dark,
-    textAlign: 'center',
+    fontSize: 14,
   },
 })
 

@@ -29,6 +29,9 @@ interface FormInputProps extends TextInputProps {
   // error?: string | string[] | FormikErrors<any> | FormikErrors<any>[]
   error?: string | false | undefined
   onPressRightIcon?: TouchableOpacityProps['onPress']
+  editable?: boolean
+  onPress?: TouchableOpacityProps['onPress']
+  backGroundColor?: string
 }
 
 const FormInput = (props: FormInputProps) => {
@@ -43,9 +46,14 @@ const FormInput = (props: FormInputProps) => {
     showRightIcon,
     error,
     errorStyle,
+    editable = true,
     onPressRightIcon,
+    onPress,
+    backGroundColor,
     ...inputProps
   } = props
+  const Component = !!onPress ? TouchableOpacity : View
+
   return (
     <View style={[styles.container, containerStyle]}>
       {!!label && (
@@ -54,22 +62,54 @@ const FormInput = (props: FormInputProps) => {
           {requireText && <Text style={styles.requireText}> *</Text>}
         </View>
       )}
-      <View style={styles.inputContainer}>
-        {!!leftIcon && <FastImage source={leftIcon} style={styles.leftIcon} />}
-        <TextInput
-          placeholderTextColor={colors.text.light}
-          style={[styles.input, inputStyle]}
-          {...inputProps}
-        />
-        {!!rightIcon && !onPressRightIcon ? (
-          <FastImage source={rightIcon} style={styles.rightIcon} />
-        ) : (
-          <TouchableOpacity
-            onPress={onPressRightIcon}
-            children={<FastImage source={rightIcon} style={styles.rightIcon} />}
+      <Component
+        style={[
+          styles.inputContainer,
+          backGroundColor && { backgroundColor: backGroundColor },
+        ]}
+        onPress={onPress}
+      >
+        {!!leftIcon && (
+          <FastImage
+            source={leftIcon}
+            style={styles.leftIcon}
+            tintColor={colors.text.dark}
           />
         )}
-      </View>
+        <TextInput
+          pointerEvents={!!onPress ? 'none' : 'auto'}
+          placeholderTextColor={colors.text.light}
+          style={[
+            styles.input,
+            inputStyle,
+            !editable && { color: colors.text.lightest },
+          ]}
+          editable={editable}
+          {...inputProps}
+        />
+        {!!rightIcon && (
+          <View>
+            {!!rightIcon && !onPressRightIcon ? (
+              <FastImage
+                source={rightIcon}
+                style={styles.rightIcon}
+                tintColor={colors.text.dark}
+              />
+            ) : (
+              <TouchableOpacity
+                onPress={onPressRightIcon}
+                children={
+                  <FastImage
+                    source={rightIcon}
+                    style={styles.rightIcon}
+                    tintColor={colors.text.dark}
+                  />
+                }
+              />
+            )}
+          </View>
+        )}
+      </Component>
       {!!error && (
         <Animatable.Text
           animation="fadeIn"
@@ -109,10 +149,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: colors.colorDefault.border,
     borderRadius: 8,
-    paddingHorizontal: 12,
-    // paddingVertical: 15,
     marginTop: 8,
-    height: 48,
   },
   leftIcon: {
     width: 20,
@@ -123,11 +160,14 @@ const styles = StyleSheet.create({
     width: 20,
     height: 20,
     marginLeft: 8,
+    marginRight: 12,
   },
   input: {
     flex: 1,
     fontSize: 14,
     color: colors.text.dark,
+    padding: 12,
+    borderRadius: 8,
   },
   errorText: {
     fontSize: 12,

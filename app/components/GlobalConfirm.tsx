@@ -41,7 +41,14 @@ const ModalConfirm = (props: Props) => {
         activeOpacity={1}
         onPress={e => e.stopPropagation()}
       >
-        <Text style={{ color: colors.text.primary }} children={title} />
+        <Text
+          style={{
+            color: colors.text.primary,
+            fontSize: 20,
+            fontWeight: '700',
+          }}
+          children={title}
+        />
         <Text
           style={{
             // ...fonts.regular16,
@@ -49,6 +56,8 @@ const ModalConfirm = (props: Props) => {
             color: colors.text.dark,
             width: '90%',
             textAlign: 'center',
+            fontSize: 16,
+            fontWeight: '400',
           }}
           children={content}
         />
@@ -65,7 +74,9 @@ const ModalConfirm = (props: Props) => {
               navigation.goBack()
             }}
             children={
-              <Text style={{ color: colors.text.light }}>{textCancel}</Text>
+              <Text style={{ color: colors.text.light, fontSize: 16 }}>
+                {textCancel}
+              </Text>
             }
           />
           <View style={{ width: 16 }} />
@@ -76,7 +87,9 @@ const ModalConfirm = (props: Props) => {
               !!action && action()
             }}
             children={
-              <Text style={{ color: colors.white }}>{textConfirm}</Text>
+              <Text style={{ color: colors.white, fontSize: 16 }}>
+                {textConfirm}
+              </Text>
             }
           />
         </View>

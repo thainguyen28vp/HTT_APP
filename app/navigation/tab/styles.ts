@@ -1,4 +1,4 @@
-import { StyleSheet } from 'react-native'
+import { Platform, StyleSheet } from 'react-native'
 
 const styles = StyleSheet.create({
   shadow: {
@@ -14,20 +14,17 @@ const styles = StyleSheet.create({
   tab: {
     alignItems: 'center',
     alignContent: 'center',
-    marginTop: 11,
+    // marginTop: 11,
+    backgroundColor: 'red',
   },
   img_icon: {
     width: 24,
     height: 24,
     resizeMode: 'contain',
-    backgroundColor: 'white',
-    marginTop: 14,
   },
 
   txtLabel: {
-    lineHeight: 20,
     fontSize: 12,
-    // fontSize: Platform.OS == 'ios' ? 12 : 18,
   },
 })
 export default styles

@@ -1,5 +1,12 @@
-import { View, Text, SafeAreaView, ScrollView, Image } from 'react-native'
-import React, { useEffect } from 'react'
+import {
+  View,
+  Text,
+  SafeAreaView,
+  ScrollView,
+  Image,
+  TouchableOpacity,
+} from 'react-native'
+import React, { useEffect, useState } from 'react'
 import styles from './styles'
 import R from '@R'
 import FormInput from '@app/components/FormInput'
@@ -9,20 +16,38 @@ import { Formik } from 'formik'
 import ButtonCustom from '@app/components/ButtonCustom'
 import auth from '@react-native-firebase/auth'
 import { GoogleSignin } from '@react-native-google-signin/google-signin'
-import reactotron from 'ReactotronConfig'
 import { onGoogleButtonPress } from './socialLogin'
 import { showMessages } from '@app/utils/GlobalAlertHelper'
+import LoadingProgress from '@app/components/LoadingProgress'
+import {
+  SCREEN_ROUTER,
+  SCREEN_ROUTER_APP,
+  SCREEN_ROUTER_AUTH,
+} from '@app/config/screenType'
+import ScreenWrapper from '@app/components/ScreenWrapper'
+import AsyncStorageService from '@service/AsyncStorage/AsyncStorageService'
+import NavigationUtil from '@app/navigation/NavigationUtil'
 
 const validationSchema = Yup.object().shape({
   username: Yup.string()
-    .min(3, 'Tên đăng nhập ít nhất 3 ký tự')
-    .required('Vui lòng nhập tên đăng nhập'),
+    .matches(
+      /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
+      R.strings().email_invalid
+    )
+    .required(R.strings().email_required),
   password: Yup.string()
-    .min(6, 'Mật khẩu ít nhất 6 ký tự')
-    .required('Vui lòng nhập mật khẩu'),
+    .min(6, R.strings().password_min_six_character)
+    .required(R.strings().password_required),
 })
+interface FormikProps {
+  username: string
+  password: string
+}
+const LoginScreen = (props: any) => {
+  const { navigation } = props
+  const [isLoading, setIsLoading] = useState(false)
+  const [isShowPass, setIsShowPass] = useState(false)
 
-const LoginScreen = () => {
   useEffect(() => {
     GoogleSignin.configure({
       webClientId:
@@ -34,97 +59,116 @@ const LoginScreen = () => {
     username: '',
     password: '',
   }
-  const onPressFbLogin = () => {
-    auth()
-      .createUserWithEmailAndPassword(
-        'jane.doe@example.com',
-        'SuperSecretPassword!'
-      )
-      .then(() => {
-        console.log('User account created & signed in!')
+
+  const submitForm = async (values: FormikProps) => {
+    setIsLoading(true)
+    await auth()
+      .signInWithEmailAndPassword(values.username, values.password)
+      .then(result => {
+        const { user } = result
+        AsyncStorageService.putToken(user.uid)
+        NavigationUtil.navigate(SCREEN_ROUTER.MAIN)
       })
       .catch(error => {
-        if (error.code === 'auth/email-already-in-use') {
-          console.log('That email address is already in use!')
-        }
-
-        if (error.code === 'auth/invalid-email') {
-          console.log('That email address is invalid!')
-        }
-
-        console.error(error)
+        showMessages(R.strings().noti, R.strings().login_faile)
       })
+    setIsLoading(false)
   }
 
-  const onPressAppleLogin = () => {
-    onGoogleButtonPress().then(result => {
-      if (!!result?.additionalUserInfo) {
-        showMessages(R.strings().noti, R.strings().login_success)
+  const onPressFbLogin = async () => {}
+
+  const onPressGoogleLogin = async () => {
+    setIsLoading(true)
+    await onGoogleButtonPress().then(result => {
+      if (!!result?.user) {
+        AsyncStorageService.putToken(result?.user?.uid)
+        NavigationUtil.navigate(SCREEN_ROUTER.MAIN)
+      } else {
+        showMessages(R.strings().noti, R.strings().login_faile)
       }
     })
+    setIsLoading(false)
   }
-  const onPressGoogleLogin = () => {
+  const onPressAppleLogin = () => {
     console.log('onPressGoogleLogin')
   }
-  return (
-    <SafeAreaView style={{ flex: 1 }}>
-      <ScrollView contentContainerStyle={styles.flex}>
+  const renderHeader = () => {
+    return (
+      <View style={{ alignItems: 'center' }}>
         <Image source={R.images.logo} style={styles.logo} />
         <Text style={styles.txtLogin}>{R.strings().login}</Text>
         <Text style={styles.txtPleaseLogin}>{R.strings().pleaseLogin}</Text>
-        <Formik
-          initialValues={initialValues}
-          validationSchema={validationSchema}
-          onSubmit={values => {
-            console.log(values)
-          }}
+      </View>
+    )
+  }
+  const renderForm = () => {
+    return (
+      <Formik
+        initialValues={initialValues}
+        validationSchema={validationSchema}
+        onSubmit={submitForm}
+      >
+        {({ handleChange, handleSubmit, values, errors, touched }) => (
+          <>
+            <FormInput
+              label={R.strings().email}
+              requireText
+              value={values.username}
+              onChangeText={handleChange('username')}
+              error={touched.username && errors.username}
+              placeholder={R.strings().enter_email}
+            />
+            <FormInput
+              label={R.strings().password}
+              requireText
+              value={values.password}
+              onChangeText={handleChange('password')}
+              error={touched.password && errors.password}
+              placeholder={R.strings().enter_password}
+              rightIcon={isShowPass ? images.ic_eye_show : images.ic_eye_hide}
+              secureTextEntry={!isShowPass}
+              onPressRightIcon={() => setIsShowPass(!isShowPass)}
+            />
+            <ButtonCustom style={styles.btn} onPress={() => handleSubmit()}>
+              <Text style={styles.txtBtnLogin}>{R.strings().login}</Text>
+            </ButtonCustom>
+          </>
+        )}
+      </Formik>
+    )
+  }
+  const renderFooter = () => {
+    return (
+      <View style={styles.viewFooter}>
+        <TouchableOpacity
+          onPress={() => navigation.navigate(SCREEN_ROUTER_AUTH.REGISTER)}
         >
-          {({ handleChange, handleSubmit, values, errors, touched }) => (
-            <>
-              <FormInput
-                label={R.strings().username}
-                requireText
-                value={values.username}
-                onChangeText={handleChange('username')}
-                error={touched.username && errors.username}
-                placeholder={R.strings().enter_username}
-              />
-              <FormInput
-                label={R.strings().password}
-                requireText
-                value={values.password}
-                onChangeText={handleChange('password')}
-                error={touched.password && errors.password}
-                placeholder={R.strings().enter_password}
-                rightIcon={images.ic_eye_hide}
-                onPressRightIcon={() => {}}
-              />
-              <ButtonCustom style={styles.btn} onPress={() => handleSubmit()}>
-                <Text style={styles.txtBtnLogin}>{R.strings().login}</Text>
-              </ButtonCustom>
-            </>
-          )}
-        </Formik>
-        <View style={styles.viewFooter}>
           <Text style={styles.txtRegister}>{R.strings().no_account}</Text>
-          <Text style={styles.txtOr}>{R.strings().or}</Text>
-          <View style={styles.viewOptionLofin}>
-            <ButtonCustom
-              onPress={onPressFbLogin}
-              children={<Image source={images.ic_fb} style={styles.icFb} />}
-            />
-            <ButtonCustom
-              onPress={onPressAppleLogin}
-              children={<Image source={images.ic_apple} style={styles.icFb} />}
-            />
-            <ButtonCustom
-              onPress={onPressGoogleLogin}
-              children={<Image source={images.ic_google} style={styles.icFb} />}
-            />
-          </View>
+        </TouchableOpacity>
+        <Text style={styles.txtOr}>{R.strings().or}</Text>
+        <View style={styles.viewOptionLofin}>
+          <ButtonCustom
+            onPress={onPressGoogleLogin}
+            children={<Image source={images.ic_google} style={styles.icFb} />}
+          />
+          <ButtonCustom
+            onPress={onPressFbLogin}
+            children={<Image source={images.ic_fb} style={styles.icFb} />}
+          />
+          <ButtonCustom
+            onPress={onPressAppleLogin}
+            children={<Image source={images.ic_apple} style={styles.icFb} />}
+          />
         </View>
-      </ScrollView>
-    </SafeAreaView>
+      </View>
+    )
+  }
+  return (
+    <ScreenWrapper scroll styles={styles.body} dialogLoading={isLoading}>
+      {renderHeader()}
+      {renderForm()}
+      {renderFooter()}
+    </ScreenWrapper>
   )
 }
 

@@ -8,7 +8,8 @@ const reduxEnhancer = __DEV__ ? [reactotron.createEnhancer!()] : []
 const store = configureStore({
   reducer: rootReducer,
   middleware: getDefaultMiddleware => getDefaultMiddleware(),
-  enhancers: reduxEnhancer,
+  // getDefaultMiddleware({ serializableCheck: false }),
+  enhancers: getDefaultEnhancers => getDefaultEnhancers().concat(reduxEnhancer),
 })
 export type AppDispatch = typeof store.dispatch
 export const useAppDispatch = () => useDispatch<AppDispatch>()

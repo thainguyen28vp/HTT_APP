@@ -6,7 +6,7 @@
         "root": ["./"],
         "alias": {
           "@app": "./app",
-          "@screens/*": "./app/screens/*",
+          "@screens/": "./app/screens/",
           "@config": "./app/config",
           "@R": "./app/assets/R.ts",
           "@theme": "./app/theme",
@@ -16,7 +16,8 @@
           "@utils": "./app/utils",
           "@assets": "./app/assets",
           "@hooks": "./app/hooks",
-          "@store": "./app/store"
+          "@store": "./app/store",
+          "@service": "./app/service"
         }
       }
     ]
