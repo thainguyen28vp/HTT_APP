@@ -21,6 +21,7 @@ import ScreenWrapper from '@app/components/ScreenWrapper'
 import { showMessages } from '@app/utils/GlobalAlertHelper'
 import NavigationUtil from '@app/navigation/NavigationUtil'
 import { SCREEN_ROUTER_AUTH } from '@app/config/screenType'
+import { useTheme } from '@app/context/ThemeContext'
 
 const validationSchema = Yup.object().shape({
   username: Yup.string()
@@ -36,13 +37,14 @@ const validationSchema = Yup.object().shape({
     .oneOf([Yup.ref('password')], R.strings().password_not_match)
     .required(R.strings().password_required),
 })
-interface FormikProps {
+interface FormikValuesProps {
   username: string
   password: string
   confirmPassword: string
 }
 
 const RegisterScreen = () => {
+  const { theme } = useTheme()
   const [isLoading, setIsLoading] = useState(false)
   const [isShowPass, setIsShowPass] = useState(false)
   const [isShowConfirmPass, setIsShowConfirmPass] = useState(false)
@@ -53,13 +55,15 @@ const RegisterScreen = () => {
     confirmPassword: '',
   }
 
-  const submitForm = async (values: FormikProps) => {
+  const submitForm = async (values: FormikValuesProps) => {
     setIsLoading(true)
     await auth()
       .createUserWithEmailAndPassword(values.username, values.password)
       .then(() => {
         showMessages(R.strings().noti, R.strings().register_success, () =>
-          NavigationUtil.navigate(SCREEN_ROUTER_AUTH.LOGIN)
+          setTimeout(() => {
+            NavigationUtil.goBack()
+          }, 300)
         )
       })
       .catch(error => {
@@ -117,7 +121,10 @@ const RegisterScreen = () => {
                 secureTextEntry={!isShowConfirmPass}
               />
 
-              <ButtonCustom style={styles.btn} onPress={() => handleSubmit()}>
+              <ButtonCustom
+                style={[styles.btn, { backgroundColor: theme.colors.primary }]}
+                onPress={() => handleSubmit()}
+              >
                 <Text style={styles.txtBtnLogin}>{R.strings().login}</Text>
               </ButtonCustom>
             </>

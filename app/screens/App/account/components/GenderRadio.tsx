@@ -4,16 +4,19 @@ import FastImage from '@d11/react-native-fast-image'
 import images from '@app/assets/imagesAsset'
 import R from '@R'
 import { GENDER } from '@app/config/constants'
-import { colors } from '@app/theme'
+import { useTheme } from '@app/context/ThemeContext'
 
 interface GenderRadioProps {
   value: string
   onChange: (value: string) => void
 }
 const GenderRadio = ({ value, onChange }: GenderRadioProps) => {
+  const { theme } = useTheme()
   return (
     <View style={styles.container}>
-      <Text style={styles.txtTitle}>{R.strings().gender}</Text>
+      <Text style={[styles.txtTitle, { color: theme.colors.text }]}>
+        {R.strings().gender}
+      </Text>
       <View style={styles.wrapperRadio}>
         <TouchableOpacity
           onPress={() => onChange(GENDER.MALE)}
@@ -23,8 +26,8 @@ const GenderRadio = ({ value, onChange }: GenderRadioProps) => {
             style={[
               styles.radio,
               value === GENDER.MALE
-                ? { backgroundColor: colors.primary }
-                : { borderWidth: 1, borderColor: '#D5DAE1' },
+                ? { backgroundColor: theme.colors.primary }
+                : { borderWidth: 1, borderColor: theme.colors.border },
             ]}
           >
             <FastImage source={images.ic_check} style={styles.icCheck} />
@@ -39,8 +42,8 @@ const GenderRadio = ({ value, onChange }: GenderRadioProps) => {
             style={[
               styles.radio,
               value === GENDER.FEMALE
-                ? { backgroundColor: colors.primary }
-                : { borderWidth: 1, borderColor: '#D5DAE1' },
+                ? { backgroundColor: theme.colors.primary }
+                : { borderWidth: 1, borderColor: theme.colors.border },
             ]}
           >
             <FastImage source={images.ic_check} style={styles.icCheck} />
@@ -66,7 +69,6 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: 'bold',
     lineHeight: 24,
-    color: colors.text.dark,
     marginTop: 12,
   },
   icCheck: {

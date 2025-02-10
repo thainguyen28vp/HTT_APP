@@ -16,6 +16,7 @@ import FastImage from '@d11/react-native-fast-image'
 import { showConfirm } from '@app/utils/GlobalAlertHelper'
 import NavigationUtil from '../NavigationUtil'
 import AsyncStorageService from '@app/service/AsyncStorage/AsyncStorageService'
+import { useTheme } from '@app/context/ThemeContext'
 
 const { HOME, ACCOUNT, WORK } = MAIN_TAB
 
@@ -43,10 +44,12 @@ export const TAB_BAR: Record<string, TabBarOption> = {
 const Tab = createBottomTabNavigator()
 
 const Tabs = () => {
+  const { theme } = useTheme()
   return (
     <Tab.Navigator
       screenOptions={({ navigation, route }) => ({
         headerShown: false,
+        tabBarStyle: { backgroundColor: theme.colors.background },
         tabBarIcon: ({ focused }) => {
           const tintColor = focused ? '#F68C20' : '#A5A7AB'
           return (

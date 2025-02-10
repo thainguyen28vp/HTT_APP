@@ -9,15 +9,16 @@ import {
 } from 'react-native'
 import React, { Component } from 'react'
 import FastImage from '@d11/react-native-fast-image'
-import { colors, OS } from '@app/theme'
+import { OS } from '@app/theme'
 import NavigationUtil from '@app/navigation/NavigationUtil'
 import R from '@R'
 import { isIphoneX } from 'react-native-iphone-x-helper'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
+import { useTheme } from '@app/context/ThemeContext'
 
 export interface HeaderProps {
   titleHeader: string
-  renderRightComponentHeader?: () => React.ReactNode
+  renderRightComponentHeader?: React.ReactNode
   titlePosition?: 'center' | 'left'
   showBackHeader?: boolean
   onBack?: () => void
@@ -27,6 +28,7 @@ export interface HeaderProps {
 }
 
 const Header = (props: HeaderProps) => {
+  const { theme } = useTheme()
   const {
     titleHeader,
     renderRightComponentHeader,
@@ -61,7 +63,9 @@ const Header = (props: HeaderProps) => {
             <FastImage
               source={R.images.ic_back}
               style={{ width: 24, height: 24 }}
-              tintColor={colorsBack ? colorsBack : colors.gray}
+              tintColor={
+                colorsBack ? theme.colors.text : theme.colors.textLight
+              }
               resizeMode="contain"
             />
           </TouchableOpacity>
@@ -69,16 +73,14 @@ const Header = (props: HeaderProps) => {
         <Text
           style={[
             styles.title,
-            { textAlign: titlePosition },
+            { color: theme.colors.text, textAlign: titlePosition },
             titlePosition == 'left' && { paddingLeft: 16 },
           ]}
         >
           {titleHeader}
         </Text>
         {!!renderRightComponentHeader && titlePosition != 'center' && (
-          <View style={{ paddingRight: 16 }}>
-            {renderRightComponentHeader()}
-          </View>
+          <View style={{ paddingRight: 16 }}>{renderRightComponentHeader}</View>
         )}
       </View>
     </>
@@ -102,7 +104,6 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 20,
     fontWeight: '700',
-    color: colors.text.dark,
     flex: 1,
   },
   positionIcon: {

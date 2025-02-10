@@ -22,6 +22,14 @@ class AsyncStoreService {
       __DEV__ && reactotron.log!(e)
     }
   }
+  async removeToken() {
+    try {
+      return await AsyncStorage.removeItem(this.TOKEN_KEY)
+    } catch (e) {
+      console.warn('StorageClient: Failed to remove token')
+      __DEV__ && reactotron.log!(e)
+    }
+  }
 
   async putRole(data: string) {
     try {

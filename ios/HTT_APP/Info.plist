@@ -5,7 +5,7 @@
 	<key>CFBundleDevelopmentRegion</key>
 	<string>en</string>
 	<key>CFBundleDisplayName</key>
-	<string>HTT_APP</string>
+	<string>Hoa đẹp</string>
 	<key>CFBundleExecutable</key>
 	<string>$(EXECUTABLE_NAME)</string>
 	<key>CFBundleIdentifier</key>
@@ -31,6 +31,12 @@
 			</array>
 		</dict>
 	</array>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>$(PRODUCT_NAME) muốn truy cập Thư viện ảnh của bạn để cập nhật ảnh sản phẩm, ảnh hồ sơ cá nhân của ban!</string>
+	<key>NSCameraUsageDescription</key>
+	<string>$(PRODUCT_NAME) muốn truy cập Camera để ghi hình cập nhật ảnh đại diện</string>
+	<key>NSPhotoLibraryAddUsageDescription</key>
+	<string>$(PRODUCT_NAME) muốn truy cập Thư viện ảnh để lưu ảnh sản phẩm</string>
 	<key>CFBundleVersion</key>
 	<string>$(CURRENT_PROJECT_VERSION)</string>
 	<key>LSRequiresIPhoneOS</key>

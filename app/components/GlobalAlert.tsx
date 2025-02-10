@@ -1,7 +1,8 @@
 import React from 'react'
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native'
-import { colors, dimensions } from '@app/theme'
+import { dimensions } from '@app/theme'
 import R from '@R'
+import { useTheme } from '@app/context/ThemeContext'
 
 type AlertProp = {
   title?: string
@@ -18,6 +19,8 @@ interface Props {
 const { width } = dimensions
 
 const ModalAlert = (props: Props) => {
+  const { theme } = useTheme()
+
   const {
     navigation,
     route: { params },
@@ -29,9 +32,15 @@ const ModalAlert = (props: Props) => {
   const text = params?.text || R.strings().yes
   return (
     <View style={styles.wrapper}>
-      <View style={styles.container}>
-        <Text style={styles.title} children={title} />
-        <Text style={styles.description} children={content} />
+      <View style={[styles.container, { backgroundColor: '#fff' }]}>
+        <Text
+          style={[styles.title, { color: theme.colors.primary }]}
+          children={title}
+        />
+        <Text
+          style={[styles.description, { color: theme.colors.text }]}
+          children={content}
+        />
         <TouchableOpacity
           onPress={() => {
             navigation.pop()
@@ -39,11 +48,11 @@ const ModalAlert = (props: Props) => {
           }}
           children={
             <View
-              style={styles.btn}
+              style={[styles.btn, { backgroundColor: theme.colors.primary }]}
               children={
                 <Text
                   style={{
-                    color: colors.white,
+                    color: theme.colors.text,
                     textAlign: 'center',
                     fontSize: 16,
                   }}
@@ -71,7 +80,6 @@ const styles = StyleSheet.create({
   container: {
     // ...styleView.centerItem,
     width: width - 40,
-    backgroundColor: colors.white,
     borderRadius: 16,
     paddingHorizontal: 20,
     paddingVertical: 27,
@@ -82,14 +90,13 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     width: width - 80,
     height: 40,
-    backgroundColor: colors.primary,
     borderRadius: 8,
   },
-  title: { color: colors.text.primary, textAlign: 'center', fontSize: 16 },
+  title: { textAlign: 'center', fontSize: 16 },
   description: {
     textAlign: 'center',
     marginVertical: 20,
-    color: colors.text.dark,
+
     fontSize: 14,
   },
 })

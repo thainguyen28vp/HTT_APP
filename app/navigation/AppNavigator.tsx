@@ -1,11 +1,12 @@
-import { View, Text } from 'react-native'
 import React from 'react'
 import { NavigationContainer } from '@react-navigation/native'
 import {
+  CardStyleInterpolators,
   createStackNavigator,
   StackCardInterpolationProps,
   StackHeaderInterpolationProps,
   TransitionPresets,
+  TransitionSpecs,
 } from '@react-navigation/stack'
 import NavigationUtil from './NavigationUtil'
 import { ROOT_STACK, SCREEN_ROUTER } from '@config/screenType'
@@ -18,46 +19,40 @@ import {
 import Tabs from './tab/Tabs'
 import GlobalAlert from '@app/components/GlobalAlert'
 import GlobalConfirm from '@app/components/GlobalConfirm'
+import { Easing } from 'react-native'
 
 const { MAIN } = SCREEN_ROUTER
 
 const RootStack = createStackNavigator()
 const screenOptions = {
+  ...TransitionPresets.ModalFadeTransition,
   headerShown: false,
   cardStyle: { backgroundColor: 'transparent' },
   cardOverlayEnabled: true,
-  cardStyleInterpolator: ({
-    current: { progress },
-  }: StackHeaderInterpolationProps & any) => ({
-    cardStyle: {
-      opacity: progress.interpolate({
-        inputRange: [0, 0.5, 0.9, 1],
-        outputRange: [0, 0.25, 0.7, 1],
-      }),
-    },
-    overlayStyle: {
-      opacity: progress.interpolate({
-        inputRange: [0, 1],
-        outputRange: [0, 0.5],
-        extrapolate: 'clamp',
-      }),
-    },
-  }),
 }
+// const da = {
+// headerShown: false,
+// gestureEnabled: true,
+// ...TransitionPresets.SlideFromRightIOS,
+// cardStyle: { backgroundColor: 'green' },
+// cardOverlayEnabled: true,
+// }
 
-const MainApp = () => {
-  return (
-    <AuthStack.Navigator
-      screenOptions={{ headerShown: false }}
-      // initialRouteName={MAIN}
-    >
-      {StackAuthScreen()}
-      <MainStack.Screen name={MAIN} component={Tabs} />
-      {StackAppScreen()}
-    </AuthStack.Navigator>
-  )
-}
 const AppNavigator = () => {
+  const MainApp = () => {
+    return (
+      <AuthStack.Navigator
+        screenOptions={{
+          headerShown: false,
+          ...TransitionPresets.SlideFromRightIOS,
+        }}
+      >
+        {StackAuthScreen()}
+        <MainStack.Screen name={MAIN} component={Tabs} />
+        {StackAppScreen()}
+      </AuthStack.Navigator>
+    )
+  }
   return (
     <NavigationContainer
       ref={navigatorRef => {

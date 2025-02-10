@@ -8,6 +8,7 @@ import {
 import FastImage from '@d11/react-native-fast-image'
 import R from '@R'
 import AsyncStorageService from '@app/service/AsyncStorage/AsyncStorageService'
+import ScreenWrapper from '@app/components/ScreenWrapper'
 
 const SplashScreen = (props: any) => {
   useEffect(() => {
@@ -16,14 +17,23 @@ const SplashScreen = (props: any) => {
     }, 1000)
   }, [])
   const checkLogin = async () => {
-    const token = (await AsyncStorageService.getToken()) || ''
+    const [token, is_login] = await Promise.all([
+      AsyncStorageService.getToken(),
+      AsyncStorageService.load('is_login'),
+    ])
     if (!token) {
-      props.navigation.reset({
-        index: 0,
-        routes: [{ name: SCREEN_ROUTER_AUTH.LOGIN }],
-        // routes: [{ name: SCREEN_ROUTER_APP.TEST }],
-        // routes: [{ name: SCREEN_ROUTER.MAIN }],
-      })
+      if (!Number(is_login)) {
+        props.navigation.reset({
+          index: 0,
+          routes: [{ name: SCREEN_ROUTER_AUTH.WELLCOME }],
+        })
+      } else
+        props.navigation.reset({
+          index: 0,
+          routes: [{ name: SCREEN_ROUTER_AUTH.LOGIN }],
+          // routes: [{ name: SCREEN_ROUTER_APP.TEST }],
+          // routes: [{ name: SCREEN_ROUTER.MAIN }],
+        })
     } else {
       props.navigation.reset({
         index: 0,
@@ -35,9 +45,9 @@ const SplashScreen = (props: any) => {
   }
 
   return (
-    <SafeAreaView style={styles.flex}>
+    <ScreenWrapper styles={styles.flex}>
       <FastImage source={R.images.logo} style={styles.logo} />
-    </SafeAreaView>
+    </ScreenWrapper>
   )
 }
 const styles = StyleSheet.create({

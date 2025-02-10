@@ -1,4 +1,4 @@
-import { colors, WIDTH } from '@app/theme'
+import { WIDTH } from '@app/theme'
 import { StyleSheet } from 'react-native'
 
 const styles = StyleSheet.create({
@@ -20,11 +20,10 @@ const styles = StyleSheet.create({
     fontSize: 24,
     fontWeight: '700',
     lineHeight: 36,
-    color: colors.text.primary,
+
     marginBottom: 8,
   },
   txtPleaseLogin: {
-    color: colors.text.light,
     fontSize: 14,
     lineHeight: 20,
     marginTop: 10,
@@ -38,7 +37,7 @@ const styles = StyleSheet.create({
     width: '100%',
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: colors.primary,
+
     borderRadius: 20,
     marginTop: 60,
   },
@@ -66,13 +65,11 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     fontSize: 16,
     fontWeight: '400',
-    color: colors.text.light,
     marginVertical: 20,
   },
   txtRegister: {
     fontSize: 14,
     fontWeight: '400',
-    color: colors.error.primary,
     textAlign: 'right',
     marginTop: 8,
     // width: '100%',

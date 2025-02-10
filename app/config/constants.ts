@@ -2,4 +2,5 @@ const GENDER = {
   MALE: 'male',
   FEMALE: 'female',
 }
-export { GENDER }
+const BASE_REQUEST = 'https://api.thedogapi.com/'
+export { GENDER, BASE_REQUEST }

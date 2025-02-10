@@ -1,4 +1,3 @@
-import { colors } from '@app/theme'
 import { StyleSheet } from 'react-native'
 
 const styles = StyleSheet.create({
@@ -10,7 +9,6 @@ const styles = StyleSheet.create({
     width: '100%',
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: colors.primary,
     borderRadius: 20,
     marginTop: 60,
   },

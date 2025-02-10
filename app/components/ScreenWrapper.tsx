@@ -7,14 +7,16 @@ import {
   ViewStyle,
   Platform,
   KeyboardAvoidingView,
+  StatusBar,
 } from 'react-native'
 import React from 'react'
 import Header, { HeaderProps } from './Header'
 import LoadingProgress from './LoadingProgress'
 import Loading from './Loading'
-import { colors } from '@app/theme'
+import { useTheme } from '@app/context/ThemeContext'
 
-interface ScreenWrapperProps extends Omit<HeaderProps, 'titleHeader'> {
+interface ScreenWrapperProps
+  extends Omit<HeaderProps, 'titleHeader' | 'titlePosition'> {
   children: React.ReactNode
   isLoading?: boolean
   isError?: object | boolean
@@ -40,15 +42,18 @@ interface ScreenWrapperProps extends Omit<HeaderProps, 'titleHeader'> {
   styles?: StyleProp<ViewStyle>
   titleHeader?: string
   backgroundColor?: string
+  renderComponent?: React.ReactNode
+  titlePosition?: 'center' | 'left'
 }
 
 const ScreenWrapper = (props: ScreenWrapperProps) => {
+  const { theme, isDarkMode } = useTheme()
   const {
     children,
     isLoading,
     isError,
     reload,
-    unsafe,
+    unsafe = true,
     hidden,
     scroll,
     header,
@@ -57,7 +62,9 @@ const ScreenWrapper = (props: ScreenWrapperProps) => {
     renderRightComponentHeader,
     dialogLoading = false,
     styles,
-    backgroundColor = colors.white,
+    backgroundColor = theme.colors.background,
+    renderComponent,
+    titlePosition = 'center',
     onBack,
   } = props
   const renderBody = () => {
@@ -94,6 +101,11 @@ const ScreenWrapper = (props: ScreenWrapperProps) => {
       style={{ flex: 1, backgroundColor: backgroundColor }}
       keyboardVerticalOffset={0}
     >
+      <StatusBar
+        translucent={!!unsafe}
+        backgroundColor={'transparent'}
+        barStyle={isDarkMode ? 'light-content' : 'dark-content'}
+      />
       {!!header && header}
       {(!!titleHeader || !!showBackHeader || !!renderRightComponentHeader) && (
         <Header
@@ -101,6 +113,7 @@ const ScreenWrapper = (props: ScreenWrapperProps) => {
           showBackHeader={showBackHeader}
           renderRightComponentHeader={renderRightComponentHeader}
           onBack={onBack}
+          titlePosition={titlePosition}
         />
       )}
       {!unsafe ? (
@@ -109,6 +122,7 @@ const ScreenWrapper = (props: ScreenWrapperProps) => {
         renderBody()
       )}
       {dialogLoading && <LoadingProgress />}
+      {!!renderComponent && renderComponent}
     </KeyboardAvoidingView>
   )
 }

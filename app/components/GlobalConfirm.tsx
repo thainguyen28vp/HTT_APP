@@ -1,8 +1,17 @@
 import React from 'react'
-import { View, Text, TouchableOpacity, StyleSheet } from 'react-native'
-import { colors, dimensions } from '@app/theme'
+import {
+  View,
+  Text,
+  TouchableOpacity,
+  StyleSheet,
+  ImageRequireSource,
+} from 'react-native'
+import { dimensions } from '@app/theme'
 import R from '@R'
 import { NavigationProp, RouteProp } from '@react-navigation/native'
+import FastImage from '@d11/react-native-fast-image'
+import images from '@app/assets/imagesAsset'
+import { useTheme } from '@app/context/ThemeContext'
 
 type ConfirmProps = {
   title?: string
@@ -10,6 +19,7 @@ type ConfirmProps = {
   action?: () => void
   textConfirm?: string
   textCancel?: string
+  icon?: ImageRequireSource
 }
 
 type Props = {
@@ -20,6 +30,8 @@ type Props = {
 const { width } = dimensions
 
 const ModalConfirm = (props: Props) => {
+  const { theme } = useTheme()
+
   const {
     navigation,
     route: { params },
@@ -27,6 +39,7 @@ const ModalConfirm = (props: Props) => {
 
   const title = params?.title || R.strings().noti
   const content = params?.content
+  const icon = params?.icon
   const action = params?.action
   const textConfirm = params?.textConfirm || R.strings().confirm
   const textCancel = params?.textCancel || R.strings().cancel
@@ -37,13 +50,14 @@ const ModalConfirm = (props: Props) => {
       onPress={() => navigation.goBack()}
     >
       <TouchableOpacity
-        style={styles.container}
+        style={[styles.container, { backgroundColor: '#fff' }]}
         activeOpacity={1}
         onPress={e => e.stopPropagation()}
       >
+        {!!icon && <FastImage source={icon} style={styles.icon} />}
         <Text
           style={{
-            color: colors.text.primary,
+            // color: ,
             fontSize: 20,
             fontWeight: '700',
           }}
@@ -53,7 +67,7 @@ const ModalConfirm = (props: Props) => {
           style={{
             // ...fonts.regular16,
             marginVertical: 20,
-            color: colors.text.dark,
+            color: '#4B4F58',
             width: '90%',
             textAlign: 'center',
             fontSize: 16,
@@ -74,20 +88,20 @@ const ModalConfirm = (props: Props) => {
               navigation.goBack()
             }}
             children={
-              <Text style={{ color: colors.text.light, fontSize: 16 }}>
+              <Text style={{ color: theme.colors.textLight, fontSize: 16 }}>
                 {textCancel}
               </Text>
             }
           />
           <View style={{ width: 16 }} />
           <TouchableOpacity
-            style={[styles.btn, { backgroundColor: colors.primary }]}
+            style={[styles.btn, { backgroundColor: theme.colors.primary }]}
             onPress={() => {
               navigation.goBack()
               !!action && action()
             }}
             children={
-              <Text style={{ color: colors.white, fontSize: 16 }}>
+              <Text style={{ color: theme.colors.background, fontSize: 16 }}>
                 {textConfirm}
               </Text>
             }
@@ -110,7 +124,6 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     width: width - 40,
-    backgroundColor: colors.white,
     borderRadius: 8,
     paddingHorizontal: 20,
     paddingVertical: 27,
@@ -123,6 +136,11 @@ const styles = StyleSheet.create({
     flex: 1,
     height: 44,
     borderRadius: 4,
+  },
+  icon: {
+    width: 48,
+    height: 48,
+    marginBottom: 16,
   },
 })
 

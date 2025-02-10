@@ -13,8 +13,8 @@ import {
 } from 'react-native'
 import React, { memo } from 'react'
 import FastImage from '@d11/react-native-fast-image'
-import { colors } from '@app/theme'
 import * as Animatable from 'react-native-animatable'
+import { useTheme } from '@app/context/ThemeContext'
 
 interface FormInputProps extends TextInputProps {
   label?: string
@@ -35,6 +35,8 @@ interface FormInputProps extends TextInputProps {
 }
 
 const FormInput = (props: FormInputProps) => {
+  const { theme } = useTheme()
+
   const {
     label,
     labelStyle,
@@ -58,13 +60,18 @@ const FormInput = (props: FormInputProps) => {
     <View style={[styles.container, containerStyle]}>
       {!!label && (
         <View style={styles.labelContainer}>
-          <Text style={[styles.textLabel, labelStyle]}>{label}</Text>
+          <Text
+            style={[styles.textLabel, { color: theme.colors.text }, labelStyle]}
+          >
+            {label}
+          </Text>
           {requireText && <Text style={styles.requireText}> *</Text>}
         </View>
       )}
       <Component
         style={[
           styles.inputContainer,
+          { borderColor: theme.colors.border },
           backGroundColor && { backgroundColor: backGroundColor },
         ]}
         onPress={onPress}
@@ -73,27 +80,31 @@ const FormInput = (props: FormInputProps) => {
           <FastImage
             source={leftIcon}
             style={styles.leftIcon}
-            tintColor={colors.text.dark}
+            tintColor={theme.colors.text}
           />
         )}
+
         <TextInput
           pointerEvents={!!onPress ? 'none' : 'auto'}
-          placeholderTextColor={colors.text.light}
+          placeholderTextColor={theme.colors.textLight}
           style={[
             styles.input,
+            { color: theme.colors.text },
             inputStyle,
-            !editable && { color: colors.text.lightest },
+            !editable && { color: theme.colors.textLight },
+            !!leftIcon && { marginLeft: 0 },
           ]}
-          editable={editable}
+          editable={!!onPress ? false : editable}
           {...inputProps}
         />
+
         {!!rightIcon && (
           <View>
             {!!rightIcon && !onPressRightIcon ? (
               <FastImage
                 source={rightIcon}
                 style={styles.rightIcon}
-                tintColor={colors.text.dark}
+                tintColor={theme.colors.text}
               />
             ) : (
               <TouchableOpacity
@@ -102,7 +113,7 @@ const FormInput = (props: FormInputProps) => {
                   <FastImage
                     source={rightIcon}
                     style={styles.rightIcon}
-                    tintColor={colors.text.dark}
+                    tintColor={theme.colors.text}
                   />
                 }
               />
@@ -113,7 +124,7 @@ const FormInput = (props: FormInputProps) => {
       {!!error && (
         <Animatable.Text
           animation="fadeIn"
-          style={[styles.errorText, errorStyle]}
+          style={[styles.errorText, { color: theme.colors.error }, errorStyle]}
           children={error}
         />
       )}
@@ -126,7 +137,7 @@ export default memo(FormInput)
 const styles = StyleSheet.create({
   container: {
     width: '100%',
-    marginTop: 12,
+    marginTop: 20,
   },
   labelContainer: {
     flexDirection: 'row',
@@ -135,7 +146,6 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: 'bold',
     lineHeight: 24,
-    color: colors.text.dark,
   },
   requireText: {
     fontSize: 16,
@@ -147,14 +157,13 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     borderWidth: 1,
-    borderColor: colors.colorDefault.border,
     borderRadius: 8,
-    marginTop: 8,
   },
   leftIcon: {
     width: 20,
     height: 20,
     marginRight: 8,
+    marginLeft: 12,
   },
   rightIcon: {
     width: 20,
@@ -165,13 +174,11 @@ const styles = StyleSheet.create({
   input: {
     flex: 1,
     fontSize: 14,
-    color: colors.text.dark,
     padding: 12,
     borderRadius: 8,
   },
   errorText: {
     fontSize: 12,
-    color: colors.colorDefault.error,
     marginTop: 4,
     textAlign: 'right',
   },

@@ -1,4 +1,10 @@
-import { View, Text, ImageRequireSource, StyleSheet } from 'react-native'
+import {
+  View,
+  Text,
+  ImageRequireSource,
+  StyleSheet,
+  Switch,
+} from 'react-native'
 import React, { useEffect, useState } from 'react'
 import ScreenWrapper from '@app/components/ScreenWrapper'
 import FastImage from '@d11/react-native-fast-image'
@@ -10,32 +16,58 @@ import { clearDataInfo, requestUserThunk } from './slices/accountSlice'
 import ButtonCustom from '@app/components/ButtonCustom'
 import NavigationUtil from '@app/navigation/NavigationUtil'
 import { SCREEN_ROUTER, SCREEN_ROUTER_APP } from '@app/config/screenType'
-import { colors } from '@app/theme'
 import { showConfirm } from '@app/utils/GlobalAlertHelper'
 import auth from '@react-native-firebase/auth'
 import AsyncStorageService from '@app/service/AsyncStorage/AsyncStorageService'
+import { useTheme } from '@app/context/ThemeContext'
+import { OS } from '@app/theme'
 
 interface IOptionItem {
   sourceImg: ImageRequireSource
   title: string
-  onPress: () => void
+  onPress?: () => void
   color?: string
+  renderRightC?: React.ReactNode
 }
-const OptionItem = ({ sourceImg, title, onPress, color }: IOptionItem) => {
+const OptionItem = ({
+  sourceImg,
+  title,
+  onPress,
+  color,
+  renderRightC,
+}: IOptionItem) => {
+  const { theme } = useTheme()
   return (
     <ButtonCustom onPress={onPress} style={styles.btnOption}>
-      <FastImage source={sourceImg} style={styles.iconOption} />
-      <Text style={[styles.txtTitle, { color: color }]}>{title}</Text>
       <FastImage
-        tintColor={color ? color : ''}
-        source={images.ic_arrow_go}
-        style={styles.icBack}
+        source={sourceImg}
+        style={styles.iconOption}
+        tintColor={theme.colors.text}
       />
+      <Text
+        style={[
+          styles.txtTitle,
+          { color: theme.colors.text },
+          // { color: color },
+        ]}
+      >
+        {title}
+      </Text>
+      {!!renderRightC ? (
+        renderRightC
+      ) : (
+        <FastImage
+          source={images.ic_arrow_go}
+          style={styles.icBack}
+          tintColor={theme.colors.text}
+        />
+      )}
     </ButtonCustom>
   )
 }
 
 const AccountScreen = (props: any) => {
+  const { theme, isDarkMode, toggleTheme } = useTheme()
   const { navigation } = props
   const [loading, setLoading] = useState(false)
   const { data, isLoading, error, dialogLoading }: IAccountState =
@@ -49,7 +81,7 @@ const AccountScreen = (props: any) => {
   const handleLogOut = async () => {
     setLoading(true)
     await auth().signOut()
-    await AsyncStorageService.clear()
+    await AsyncStorageService.removeToken()
     dispatch(clearDataInfo())
     navigation.reset({
       index: 0,
@@ -65,10 +97,12 @@ const AccountScreen = (props: any) => {
           source={data.photoURL ? { uri: data.photoURL } : images.ic_account}
           style={styles.avtImage}
         />
-        <Text style={styles.txtName}>
+        <Text style={[styles.txtName, { color: theme.colors.text }]}>
           {data.displayName || R.strings().account}
         </Text>
-        <Text style={styles.txtEmail}>{data.email || R.strings().account}</Text>
+        <Text style={[styles.txtEmail, { color: theme.colors.textLight }]}>
+          {data.email || R.strings().account}
+        </Text>
       </View>
     )
   }
@@ -77,35 +111,54 @@ const AccountScreen = (props: any) => {
       <>
         <OptionItem
           sourceImg={images.ic_info_circle}
-          title={R.strings().account}
+          title={R.strings().update_info}
           onPress={() => NavigationUtil.navigate(SCREEN_ROUTER_APP.UPDATE_INFO)}
         />
         <OptionItem
           sourceImg={images.ic_tree}
-          title={R.strings().account}
-          onPress={() => NavigationUtil.navigate(SCREEN_ROUTER_APP.HOME)}
+          title={R.strings().garden_info}
+          onPress={() => NavigationUtil.navigate(SCREEN_ROUTER_APP.GARDEN_INFO)}
         />
         <OptionItem
           sourceImg={images.ic_user_check}
-          title={R.strings().account}
-          onPress={() => NavigationUtil.navigate(SCREEN_ROUTER_APP.HOME)}
+          title={R.strings().garden_staff}
+          onPress={() =>
+            NavigationUtil.navigate(SCREEN_ROUTER_APP.GARDEN_STAFF)
+          }
         />
         <OptionItem
           sourceImg={images.ic_lock}
-          title={R.strings().account}
-          onPress={() => NavigationUtil.navigate(SCREEN_ROUTER_APP.HOME)}
+          title={R.strings().change_password}
+          onPress={() =>
+            NavigationUtil.navigate(SCREEN_ROUTER_APP.CHANGE_PASSWORD)
+          }
         />
         <OptionItem
+          sourceImg={images.ic_lock}
+          title={'Dark mode'}
+          renderRightC={
+            <Switch
+              value={isDarkMode}
+              onValueChange={toggleTheme}
+              trackColor={{ false: '#767577', true: theme.colors.primary }}
+            />
+          }
+        />
+
+        <OptionItem
           sourceImg={images.ic_logout}
-          title={R.strings().account}
+          title={R.strings().logout}
           onPress={() =>
             showConfirm(
               R.strings().noti,
               R.strings().you_want_logout,
-              handleLogOut
+              handleLogOut,
+              '',
+              '',
+              images.img_logout
             )
           }
-          color={colors.primary}
+          color={theme.colors.primary}
         />
       </>
     )
@@ -113,7 +166,7 @@ const AccountScreen = (props: any) => {
 
   return (
     <ScreenWrapper
-      styles={{ backgroundColor: '#fff' }}
+      styles={{ backgroundColor: theme.colors.background }}
       isLoading={isLoading || loading}
       scroll
     >
@@ -128,7 +181,7 @@ export default AccountScreen
 const styles = StyleSheet.create({
   wrapperAvt: {
     alignItems: 'center',
-    paddingTop: 35,
+    paddingTop: OS == 'android' ? '10%' : '20%',
     borderBottomWidth: 1,
     borderBottomColor: '#D9D9D9',
     marginHorizontal: 15,
@@ -143,12 +196,10 @@ const styles = StyleSheet.create({
   txtName: {
     fontSize: 18,
     fontWeight: '400',
-    color: colors.text.dark,
   },
   txtEmail: {
     fontSize: 16,
     fontWeight: '400',
-    color: colors.text.light,
     marginBottom: 20,
     marginTop: 10,
   },
@@ -168,7 +219,6 @@ const styles = StyleSheet.create({
   },
   txtTitle: {
     flex: 1,
-    color: colors.text.dark,
     fontSize: 16,
     fontWeight: '400',
     marginLeft: 12,

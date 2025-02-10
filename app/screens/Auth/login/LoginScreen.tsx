@@ -26,7 +26,7 @@ import {
 } from '@app/config/screenType'
 import ScreenWrapper from '@app/components/ScreenWrapper'
 import AsyncStorageService from '@service/AsyncStorage/AsyncStorageService'
-import NavigationUtil from '@app/navigation/NavigationUtil'
+import { useTheme } from '@app/context/ThemeContext'
 
 const validationSchema = Yup.object().shape({
   username: Yup.string()
@@ -39,11 +39,12 @@ const validationSchema = Yup.object().shape({
     .min(6, R.strings().password_min_six_character)
     .required(R.strings().password_required),
 })
-interface FormikProps {
+interface FormikValuesProps {
   username: string
   password: string
 }
 const LoginScreen = (props: any) => {
+  const { theme } = useTheme()
   const { navigation } = props
   const [isLoading, setIsLoading] = useState(false)
   const [isShowPass, setIsShowPass] = useState(false)
@@ -60,14 +61,17 @@ const LoginScreen = (props: any) => {
     password: '',
   }
 
-  const submitForm = async (values: FormikProps) => {
+  const submitForm = async (values: FormikValuesProps) => {
     setIsLoading(true)
     await auth()
       .signInWithEmailAndPassword(values.username, values.password)
       .then(result => {
         const { user } = result
         AsyncStorageService.putToken(user.uid)
-        NavigationUtil.navigate(SCREEN_ROUTER.MAIN)
+        props.navigation.reset({
+          index: 0,
+          routes: [{ name: SCREEN_ROUTER.MAIN }],
+        })
       })
       .catch(error => {
         showMessages(R.strings().noti, R.strings().login_faile)
@@ -82,7 +86,10 @@ const LoginScreen = (props: any) => {
     await onGoogleButtonPress().then(result => {
       if (!!result?.user) {
         AsyncStorageService.putToken(result?.user?.uid)
-        NavigationUtil.navigate(SCREEN_ROUTER.MAIN)
+        props.navigation.reset({
+          index: 0,
+          routes: [{ name: SCREEN_ROUTER.MAIN }],
+        })
       } else {
         showMessages(R.strings().noti, R.strings().login_faile)
       }
@@ -96,8 +103,14 @@ const LoginScreen = (props: any) => {
     return (
       <View style={{ alignItems: 'center' }}>
         <Image source={R.images.logo} style={styles.logo} />
-        <Text style={styles.txtLogin}>{R.strings().login}</Text>
-        <Text style={styles.txtPleaseLogin}>{R.strings().pleaseLogin}</Text>
+        <Text style={[styles.txtLogin, { color: theme.colors.primary }]}>
+          {R.strings().login}
+        </Text>
+        <Text
+          style={[styles.txtPleaseLogin, { color: theme.colors.textLight }]}
+        >
+          {R.strings().pleaseLogin}
+        </Text>
       </View>
     )
   }
@@ -129,7 +142,10 @@ const LoginScreen = (props: any) => {
               secureTextEntry={!isShowPass}
               onPressRightIcon={() => setIsShowPass(!isShowPass)}
             />
-            <ButtonCustom style={styles.btn} onPress={() => handleSubmit()}>
+            <ButtonCustom
+              style={[styles.btn, { backgroundColor: theme.colors.primary }]}
+              onPress={() => handleSubmit()}
+            >
               <Text style={styles.txtBtnLogin}>{R.strings().login}</Text>
             </ButtonCustom>
           </>
@@ -143,9 +159,13 @@ const LoginScreen = (props: any) => {
         <TouchableOpacity
           onPress={() => navigation.navigate(SCREEN_ROUTER_AUTH.REGISTER)}
         >
-          <Text style={styles.txtRegister}>{R.strings().no_account}</Text>
+          <Text style={[styles.txtRegister, { color: theme.colors.primary }]}>
+            {R.strings().no_account}
+          </Text>
         </TouchableOpacity>
-        <Text style={styles.txtOr}>{R.strings().or}</Text>
+        <Text style={[styles.txtOr, { color: theme.colors.textLight }]}>
+          {R.strings().or}
+        </Text>
         <View style={styles.viewOptionLofin}>
           <ButtonCustom
             onPress={onPressGoogleLogin}
