@@ -1,6 +1,6 @@
 import images from '@app/assets/imagesAsset'
 import { WIDTH } from '@app/theme'
-import React, { useState, useRef } from 'react'
+import React, { memo, useRef } from 'react'
 import {
   StyleSheet,
   View,
@@ -14,60 +14,22 @@ import {
 interface IProps {
   rows?: number
   columns?: number
+  gap?: number
   paddingHorizontal?: number
-  renderItem?: (item: any) => React.ReactNode
+  dotActiveColor?: string
+  data: any[]
+  renderItem: (item: any) => React.ReactNode
 }
 
 const ItemList = ({
-  rows = 2,
-  columns = 1,
+  rows = 1,
+  columns = 2,
   paddingHorizontal = 12,
+  gap = paddingHorizontal,
+  dotActiveColor = '#F1A12A',
+  data = [],
+  renderItem,
 }: IProps) => {
-  const [data] = useState([
-    {
-      id: '1',
-      name: 'Cồn 70 độ (Ethanol - 500ml)',
-      price: '23.000 đ/Chai',
-      image: images.ic_account,
-      discount: '-20%',
-    },
-    {
-      id: '2',
-      name: 'Efferalgan',
-      price: '23.000 đ/Chai',
-      image: images.ic_account,
-      discount: '-20%',
-    },
-    {
-      id: '13',
-      name: 'Cồn 70 độ (Ethanol - 500ml)',
-      price: '23.000 đ/Chai',
-      image: images.ic_account,
-      discount: '-20%',
-    },
-    {
-      id: '22',
-      name: 'Efferalgan',
-      price: '23.000 đ/Chai',
-      image: images.ic_account,
-      discount: '-20%',
-    },
-    {
-      id: '2s2',
-      name: 'Efferalgan',
-      price: '23.000 đ/Chai',
-      image: images.ic_account,
-      discount: '-20%',
-    },
-    {
-      id: '2s3',
-      name: 'Paracetamol',
-      price: '25.000 đ/Hộp',
-      image: images.ic_account,
-      discount: '-15%',
-    },
-  ])
-
   const scrollX = useRef(new Animated.Value(0)).current
 
   // Tính số sản phẩm trên mỗi trang
@@ -86,22 +48,6 @@ const ItemList = ({
     (WIDTH - paddingHorizontal * 2 - paddingHorizontal * (columns - 1)) /
     columns
 
-  const renderProduct = (product: any) => (
-    <View style={[styles.itemContainer, { width: ITEM_WIDTH }]}>
-      <View style={styles.discountBadge}>
-        <Text style={styles.discountText}>{product.discount}</Text>
-      </View>
-      <Image source={product.image} style={styles.productImage} />
-      <Text numberOfLines={2} style={styles.productName}>
-        {product.name}
-      </Text>
-      <Text style={styles.productPrice}>{product.price}</Text>
-      <TouchableOpacity style={styles.addButton}>
-        <Text style={styles.addButtonText}>Thêm vào giỏ hàng</Text>
-      </TouchableOpacity>
-    </View>
-  )
-
   const renderPage = ({ item: pageItems }: any) => (
     <View
       style={[
@@ -115,16 +61,13 @@ const ItemList = ({
       {Array.from({ length: rows }, (_, rowIndex) => (
         <View
           key={`row-${rowIndex}`}
-          style={[
-            styles.rowContainer,
-            { gap: paddingHorizontal, marginBottom: paddingHorizontal },
-          ]}
+          style={[styles.rowContainer, { gap: gap, marginBottom: gap }]}
         >
           {pageItems
             .slice(rowIndex * columns, (rowIndex + 1) * columns)
             .map((item: any) => (
               <View key={item.id} style={{ width: ITEM_WIDTH }}>
-                {renderProduct(item)}
+                {renderItem(item)}
               </View>
             ))}
         </View>
@@ -150,7 +93,7 @@ const ItemList = ({
 
           const backgroundColor = scrollX.interpolate({
             inputRange,
-            outputRange: ['#D3D3D3', '#E32636', '#D3D3D3'],
+            outputRange: ['#D3D3D3', dotActiveColor, '#D3D3D3'],
             extrapolate: 'clamp',
           })
 
@@ -201,7 +144,7 @@ const ItemList = ({
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: '#f5f5f5',
+    backgroundColor: 'transparent',
   },
   pageContainer: {
     justifyContent: 'flex-start',
@@ -212,62 +155,6 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'flex-start',
     width: '100%',
-  },
-  itemContainer: {
-    backgroundColor: 'white',
-    borderRadius: 10,
-    padding: 10,
-    shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.25,
-    shadowRadius: 3.84,
-    elevation: 5,
-  },
-  productImage: {
-    width: '100%',
-    height: 120,
-    resizeMode: 'contain',
-  },
-  productName: {
-    fontSize: 14,
-    fontWeight: 'bold',
-    marginTop: 8,
-    height: 40,
-  },
-  productPrice: {
-    fontSize: 14,
-    color: '#E32636',
-    fontWeight: 'bold',
-    marginTop: 4,
-  },
-  addButton: {
-    backgroundColor: '#E32636',
-    padding: 8,
-    borderRadius: 8,
-    marginTop: 8,
-    alignItems: 'center',
-  },
-  addButtonText: {
-    color: 'white',
-    fontWeight: 'bold',
-    fontSize: 12,
-  },
-  discountBadge: {
-    position: 'absolute',
-    top: 5,
-    right: 5,
-    backgroundColor: '#E32636',
-    padding: 4,
-    borderRadius: 4,
-    zIndex: 1,
-  },
-  discountText: {
-    color: 'white',
-    fontWeight: 'bold',
-    fontSize: 12,
   },
   dotsContainer: {
     flexDirection: 'row',
@@ -281,4 +168,4 @@ const styles = StyleSheet.create({
   },
 })
 
-export default ItemList
+export default memo(ItemList)

@@ -44,6 +44,7 @@ const requestPermissionWriteLibrary = () =>
   new Promise(async resolve => {
     if (Number(Platform.Version) >= 33) {
       resolve(true)
+      return
     }
     const permission =
       Platform.OS === 'ios'

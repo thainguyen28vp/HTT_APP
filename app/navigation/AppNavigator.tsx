@@ -30,14 +30,6 @@ const screenOptions = {
   cardStyle: { backgroundColor: 'transparent' },
   cardOverlayEnabled: true,
 }
-// const da = {
-// headerShown: false,
-// gestureEnabled: true,
-// ...TransitionPresets.SlideFromRightIOS,
-// cardStyle: { backgroundColor: 'green' },
-// cardOverlayEnabled: true,
-// }
-
 const AppNavigator = () => {
   const MainApp = () => {
     return (
