@@ -1,18 +1,28 @@
-import { ActivityIndicator, StyleSheet, Text, View } from 'react-native'
+import {
+  ActivityIndicator,
+  ImageStyle,
+  StyleProp,
+  StyleSheet,
+  Text,
+  View,
+  ViewStyle,
+} from 'react-native'
 import React, { useState, memo } from 'react'
 import FastImage from '@d11/react-native-fast-image'
 
 interface IProps {
   imageUrl: string
+  containerStyle?: StyleProp<ViewStyle>
+  imageStyle?: StyleProp<ImageStyle>
 }
 
-const ImageWithLoading = ({ imageUrl }: IProps) => {
+const ImageWithLoading = ({ imageUrl, containerStyle, imageStyle }: IProps) => {
   const [isLoading, setIsLoading] = useState(true)
 
   return (
-    <View style={styles.container}>
+    <View style={[styles.container, containerStyle]}>
       <FastImage
-        style={styles.image}
+        style={[styles.image, imageStyle]}
         source={{
           uri: imageUrl,
           priority: FastImage.priority.normal,

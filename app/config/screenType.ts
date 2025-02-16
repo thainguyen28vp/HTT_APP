@@ -14,6 +14,7 @@ export const MAIN_TAB = {
   HOME: 'HOME',
   WORK: 'WORK',
   ACCOUNT: 'ACCOUNT',
+  HAVEST: 'HAVEST',
 }
 
 export const SCREEN_ROUTER_AUTH = {
@@ -25,6 +26,7 @@ export const SCREEN_ROUTER_AUTH = {
 
 export const SCREEN_ROUTER_APP = {
   HOME: 'HOME',
+  HAVEST: 'HAVEST',
   WORK: 'WORK',
   TEST: 'TEST',
   UPDATE_INFO: 'UPDATE_INFO',

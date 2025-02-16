@@ -18,10 +18,12 @@ import WorkScreen from '@app/screens/App/work/WorkScreen'
 import WellcomeScreen from '@app/screens/WellcomeScreen'
 import CropInfoScreen from '@app/screens/App/cropInfo/CropInfoScreen'
 import WorkDetails from '@app/screens/App/work/WorkDetails'
+import HarvestScreen from '@app/screens/App/harvest/HarvestScreen'
 
 const { SPLASH, LOGIN, REGISTER, WELLCOME } = SCREEN_ROUTER_AUTH
 const {
   HOME,
+  HAVEST,
   TEST,
   UPDATE_INFO,
   CHANGE_PASSWORD,
@@ -42,6 +44,7 @@ const AUTH_STACK = {
 const APP_STACK = {
   [HOME]: HomeScreen,
   [WORK]: WorkScreen,
+  [HAVEST]: HarvestScreen,
   [TEST]: Test,
   [UPDATE_INFO]: AccountInfoScreen,
   [CHANGE_PASSWORD]: ChangePasswordScreen,

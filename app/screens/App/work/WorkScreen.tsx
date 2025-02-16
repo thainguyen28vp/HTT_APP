@@ -14,18 +14,27 @@ interface Iroutes {
   key: string
   title: string
 }
+const route = [
+  { key: 'flower', title: 'Hoa' },
+  { key: 'animal', title: 'Động vật' },
+  { key: 'weather', title: 'Thời tiết' },
+  { key: 'fashion', title: 'Thời trang' },
+  { key: 'plant', title: 'Cây cối' },
+  // {key:'flower',title:''},
+]
 
 const WorkScreen = () => {
   const { theme } = useTheme()
   const { data }: any = useAppSelector(state => state.breedReducer)
   const [index, setIndex] = useState(0)
-  const [routes, setRoutes] = useState<Iroutes[]>(
-    !!data.length
-      ? data?.map((value: any) => {
-          return { key: value.id + '', title: value.name }
-        })
-      : [{ key: '1', title: '' }]
-  )
+  const [routes, setRoutes] = useState<Iroutes[]>(route)
+  // const [routes, setRoutes] = useState<Iroutes[]>(
+  //   !!data.length
+  //     ? data?.map((value: any) => {
+  //         return { key: value.id + '', title: value.name }
+  //       })
+  //     : [{ key: '1', title: '' }]
+  // )
   useEffect(() => {
     if (!!data.length) {
       setRoutes(

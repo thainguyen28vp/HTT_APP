@@ -6,15 +6,18 @@ import { RootSiblingParent } from 'react-native-root-siblings'
 import { Provider } from 'react-redux'
 import store from '@app/redux/store'
 import { GestureHandlerRootView } from 'react-native-gesture-handler'
+import { BottomSheetModalProvider } from '@gorhom/bottom-sheet'
 
 const AppContainer = () => {
   return (
     <SafeAreaProvider>
       <RootSiblingParent>
         <GestureHandlerRootView>
-          <Provider store={store}>
-            <AppNavigator />
-          </Provider>
+          <BottomSheetModalProvider>
+            <Provider store={store}>
+              <AppNavigator />
+            </Provider>
+          </BottomSheetModalProvider>
         </GestureHandlerRootView>
       </RootSiblingParent>
     </SafeAreaProvider>

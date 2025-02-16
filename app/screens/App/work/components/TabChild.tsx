@@ -15,11 +15,11 @@ const TabChild = ({ id }: any) => {
   useEffect(() => {
     callAPIHook({
       API: requestGetDogList,
-      payload: { breed_ids: id, limit: 10, page: 0 },
+      payload: { q: id },
       useLoading: setLoading,
       typeLoading: 'isLoading',
       onSuccess: res => {
-        setDogs(res)
+        setDogs(res.hits)
       },
       onError: err => {
         console.log('err', err)
@@ -40,7 +40,7 @@ const TabChild = ({ id }: any) => {
           }
           style={styles.wrapper}
         >
-          <ImageWithLoading imageUrl={item?.url} />
+          <ImageWithLoading imageUrl={item?.largeImageURL} />
           <Text style={styles.txtName}>{item?.id}</Text>
         </ButtonCustom>
       )

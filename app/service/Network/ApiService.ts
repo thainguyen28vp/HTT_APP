@@ -1,7 +1,7 @@
 import R from '@app/assets/R'
 import { showMessages } from '@app/utils/GlobalAlertHelper'
 import AsyncStoreService from '../AsyncStorage/AsyncStorageService'
-import { BASE_REQUEST } from '@app/config/constants'
+import { BASE_REQUEST, KEY_API } from '@app/config/constants'
 import NavigationUtil from '@app/navigation/NavigationUtil'
 import { SCREEN_ROUTER_AUTH } from '@app/config/screenType'
 
@@ -18,8 +18,9 @@ const createAPI = () => {
   APIInstant.defaults.timeout = 20000
   // APIInstant.defaults.headers = { 'Content-Type': 'application/json' }
   APIInstant.interceptors.request.use(async (config: any) => {
-    config.headers['YOUR-API-KEY'] =
-      'live_3qsatccN20sGL0kryQe7XfBO05aHK7SQfQ8H7Cgsj11nI5f0fbegO6QTn7RSLdIT'
+    // config.params['key'] = KEY_API
+    // config.headers['YOUR-API-KEY'] =
+    // 'live_3qsatccN20sGL0kryQe7XfBO05aHK7SQfQ8H7Cgsj11nI5f0fbegO6QTn7RSLdIT'
     // config.headers.platform = 'app'
     return config
   }, Promise.reject)

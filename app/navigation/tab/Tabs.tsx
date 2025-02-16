@@ -17,8 +17,9 @@ import { showConfirm } from '@app/utils/GlobalAlertHelper'
 import NavigationUtil from '../NavigationUtil'
 import AsyncStorageService from '@app/service/AsyncStorage/AsyncStorageService'
 import { useTheme } from '@app/context/ThemeContext'
+import HarvestScreen from '@app/screens/App/harvest/HarvestScreen'
 
-const { HOME, ACCOUNT, WORK } = MAIN_TAB
+const { HOME, ACCOUNT, WORK, HAVEST } = MAIN_TAB
 
 export const TAB_BAR: Record<string, TabBarOption> = {
   [HOME]: {
@@ -26,6 +27,12 @@ export const TAB_BAR: Record<string, TabBarOption> = {
     icon: R.images.ic_home,
     route: HomeScreen,
     title: R.strings().home,
+  },
+  [HAVEST]: {
+    name: MAIN_TAB.HAVEST,
+    icon: R.images.ic_harvest,
+    route: HarvestScreen,
+    title: R.strings().harvest,
   },
   [WORK]: {
     name: MAIN_TAB.WORK,
