@@ -18,10 +18,12 @@ const createAPI = () => {
   APIInstant.defaults.timeout = 20000
   // APIInstant.defaults.headers = { 'Content-Type': 'application/json' }
   APIInstant.interceptors.request.use(async (config: any) => {
-    // config.params['key'] = KEY_API
+    config.params = config.params || {} // <-- Fix ở đây
+    config.params['key'] = KEY_API
+    config.headers.platform = 'app'
+
     // config.headers['YOUR-API-KEY'] =
     // 'live_3qsatccN20sGL0kryQe7XfBO05aHK7SQfQ8H7Cgsj11nI5f0fbegO6QTn7RSLdIT'
-    // config.headers.platform = 'app'
     return config
   }, Promise.reject)
 

@@ -1,4 +1,4 @@
-import React, { ForwardedRef, forwardRef } from 'react'
+import React, { ForwardedRef, forwardRef, memo } from 'react'
 import { StyleProp, Text, ViewStyle } from 'react-native'
 import BottomSheet, {
   BottomSheetBackdrop,
@@ -53,4 +53,7 @@ const BottomSheetCustom = (
   )
 }
 
-export default forwardRef(BottomSheetCustom)
+export default memo(
+  forwardRef(BottomSheetCustom)
+  // (prev, next) => prev.children === next.children
+)

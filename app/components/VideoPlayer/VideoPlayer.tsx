@@ -44,6 +44,14 @@ const VideoPlayer = ({ uri, paused = false }: IProps) => {
     // }
   }, [paused])
 
+  useEffect(() => {
+    return () => {
+      // Cleanup video resource khi unmount
+      videoRef.current?.pause()
+      videoRef.current?.seek(0)
+    }
+  }, [])
+
   const toggleControls = () => {
     if (controlsTimer.current) {
       clearTimeout(controlsTimer.current)
@@ -85,7 +93,7 @@ const VideoPlayer = ({ uri, paused = false }: IProps) => {
     setIsFullScreen(prev => !prev)
   }, [])
   const onSlidingStart = useCallback(() => {
-    setIsPlaying(prev => !prev)
+    setIsPlaying(false)
   }, [])
   const onFullscreenPlayerDidDismiss = useCallback(() => {
     setIsPlaying(true)
@@ -103,7 +111,7 @@ const VideoPlayer = ({ uri, paused = false }: IProps) => {
   }, [])
   const onSlidingComplete = useCallback((value: number) => {
     videoRef.current?.seek(value)
-    setIsPlaying(prev => !prev)
+    setIsPlaying(true)
   }, [])
   console.log('rednder video...')
   // console.log(
@@ -179,5 +187,7 @@ const styles = StyleSheet.create({
 
 export default memo(
   VideoPlayer,
-  (prev, next) => prev.uri === next.uri && prev.paused === next.paused
+  (prev, next) => prev.paused === next.paused
+
+  // prev.uri === next.uri &&
 )

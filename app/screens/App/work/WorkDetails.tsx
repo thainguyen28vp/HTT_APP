@@ -1,11 +1,11 @@
-import { Alert, StyleSheet, Text, View } from 'react-native'
+import { Alert, Platform, StyleSheet, Text, View } from 'react-native'
 import React, { useState } from 'react'
 import ScreenWrapper from '@app/components/ScreenWrapper'
 import Line from './components/Line'
 import ButtonCustom from '@app/components/ButtonCustom'
 import ImageWidthLoading from '../../../components/ImageWidthLoading'
 import FastImage from '@d11/react-native-fast-image'
-import { WIDTH } from '@app/theme'
+import { OS, WIDTH } from '@app/theme'
 import RNFS from 'react-native-fs'
 import { CameraRoll } from '@react-native-camera-roll/camera-roll'
 import { requestPermissionWriteLibrary } from '@app/utils/AppPermissions'
@@ -35,8 +35,10 @@ const WorkDetails = ({ route }: any) => {
 
       await download.promise
 
+      const savePath = OS === 'ios' ? `file://${filePath}` : filePath
+
       // Lưu ảnh vào thư viện ảnh
-      await CameraRoll.saveAsset(filePath, { type: 'photo' })
+      await CameraRoll.saveAsset(savePath, { type: 'photo' })
 
       Alert.alert('Success', 'Image saved to gallery!')
     } catch (error) {

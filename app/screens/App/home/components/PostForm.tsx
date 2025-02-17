@@ -11,6 +11,7 @@ interface IProps {
   number_of_like: number | string
   avtUrl: string
   paused?: boolean
+  onPressMore: () => void
 }
 const PostForm = ({
   uri,
@@ -19,6 +20,7 @@ const PostForm = ({
   number_of_like,
   avtUrl,
   paused,
+  onPressMore,
 }: IProps) => {
   const [isLike, setIsLike] = useState(Number(number_of_like) % 2 === 0)
   const renderTop = useMemo(() => {
@@ -39,10 +41,16 @@ const PostForm = ({
           <Text style={styles.txtName}>{name}</Text>
           <Text style={styles.txtNow}>Vừa xong</Text>
         </View>
-        <FastImage
-          source={images.ic_more}
-          style={{ width: 24, aspectRatio: 1 }}
-        />
+        <TouchableOpacity onPress={onPressMore}>
+          <FastImage
+            source={images.ic_more}
+            style={{
+              width: 24,
+              aspectRatio: 1,
+              paddingVertical: 8,
+            }}
+          />
+        </TouchableOpacity>
       </View>
     )
   }, [])

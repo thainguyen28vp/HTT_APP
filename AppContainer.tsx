@@ -7,19 +7,25 @@ import { Provider } from 'react-redux'
 import store from '@app/redux/store'
 import { GestureHandlerRootView } from 'react-native-gesture-handler'
 import { BottomSheetModalProvider } from '@gorhom/bottom-sheet'
+import { PaperProvider } from 'react-native-paper'
+import { ThemeProvider } from '@app/context/ThemeContext'
 
 const AppContainer = () => {
   return (
     <SafeAreaProvider>
-      <RootSiblingParent>
-        <GestureHandlerRootView>
-          <BottomSheetModalProvider>
-            <Provider store={store}>
-              <AppNavigator />
-            </Provider>
-          </BottomSheetModalProvider>
-        </GestureHandlerRootView>
-      </RootSiblingParent>
+      <GestureHandlerRootView style={{ flex: 1 }}>
+        <ThemeProvider>
+          <Provider store={store}>
+            <PaperProvider>
+              <BottomSheetModalProvider>
+                <RootSiblingParent>
+                  <AppNavigator />
+                </RootSiblingParent>
+              </BottomSheetModalProvider>
+            </PaperProvider>
+          </Provider>
+        </ThemeProvider>
+      </GestureHandlerRootView>
     </SafeAreaProvider>
   )
 }
