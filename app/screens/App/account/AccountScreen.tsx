@@ -17,7 +17,7 @@ import ButtonCustom from '@app/components/ButtonCustom'
 import NavigationUtil from '@app/navigation/NavigationUtil'
 import { SCREEN_ROUTER, SCREEN_ROUTER_APP } from '@app/config/screenType'
 import { showConfirm } from '@app/utils/GlobalAlertHelper'
-import auth from '@react-native-firebase/auth'
+// import auth from '@react-native-firebase/auth'
 import AsyncStorageService from '@app/service/AsyncStorage/AsyncStorageService'
 import { useTheme } from '@app/context/ThemeContext'
 import { OS } from '@app/theme'
@@ -80,7 +80,7 @@ const AccountScreen = (props: any) => {
 
   const handleLogOut = async () => {
     setLoading(true)
-    await auth().signOut()
+    // await auth().signOut()
     await AsyncStorageService.removeToken()
     dispatch(clearDataInfo())
     navigation.reset({

@@ -8,6 +8,8 @@ import {
   Platform,
   KeyboardAvoidingView,
   StatusBar,
+  NativeSyntheticEvent,
+  NativeScrollEvent,
 } from 'react-native'
 import React from 'react'
 import Header, { HeaderProps } from './Header'
@@ -44,6 +46,7 @@ interface ScreenWrapperProps
   backgroundColor?: string
   renderComponent?: React.ReactNode
   titlePosition?: 'center' | 'left'
+  onScrollHandle?: (event: NativeSyntheticEvent<NativeScrollEvent>) => void
 }
 
 const ScreenWrapper = (props: ScreenWrapperProps) => {
@@ -66,6 +69,7 @@ const ScreenWrapper = (props: ScreenWrapperProps) => {
     renderComponent,
     titlePosition = 'center',
     onBack,
+    onScrollHandle,
   } = props
   const renderBody = () => {
     if (isLoading) return <Loading />
@@ -82,6 +86,7 @@ const ScreenWrapper = (props: ScreenWrapperProps) => {
       <>
         {scroll ? (
           <ScrollView
+            onScroll={onScrollHandle}
             contentContainerStyle={[{ flexGrow: 1 }, styles]}
             keyboardShouldPersistTaps="handled"
             showsVerticalScrollIndicator={false}

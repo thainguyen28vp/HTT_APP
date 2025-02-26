@@ -1,5 +1,14 @@
-import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
-import React, { useCallback, useEffect, useState } from 'react'
+import {
+  Image,
+  LayoutChangeEvent,
+  NativeScrollEvent,
+  NativeSyntheticEvent,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from 'react-native'
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import ScreenWrapper from '@app/components/ScreenWrapper'
 import FastImage from '@d11/react-native-fast-image'
 import images from '@app/assets/imagesAsset'
@@ -17,13 +26,19 @@ import ImageWithLoading from '@app/components/ImageWidthLoading'
 import { WIDTH } from '@app/theme'
 import { callAPIHook } from '@app/utils/CallApiHelper'
 import { requestGetDogList } from '@app/service/Network/order/orderApi'
+import DraggableView from '@app/components/DraggableView/DraggableView'
 
 export default function HarvestScreen() {
   const dispatch = useAppDispatch()
+  const inset = useSafeAreaInsets()
   const { theme } = useTheme()
   const insets = useSafeAreaInsets()
+  const [isSticky, setIsSticky] = useState(false)
   const [dogs, setDogs] = useState([])
   const [loading, setLoading] = useState(false)
+  const inputPosition = useRef(0)
+  const heightHeader = useRef(0)
+  const scrollY = useRef(0)
   useEffect(() => {
     dispatch(requestBreedThunk())
   }, [])
@@ -44,6 +59,23 @@ export default function HarvestScreen() {
       },
     })
   }, [])
+  const handlePositionInput = (event: LayoutChangeEvent) => {
+    event.target.measure((x: number, y: number) => {
+      inputPosition.current = y + 16
+    })
+  }
+  const onLayoutHeader = useCallback((event: LayoutChangeEvent) => {
+    const { height } = event.nativeEvent.layout
+    heightHeader.current = height
+  }, [])
+  const onScrollHandle = (event: NativeSyntheticEvent<NativeScrollEvent>) => {
+    scrollY.current = event.nativeEvent.contentOffset.y
+    if (scrollY.current >= inputPosition.current && !isSticky) {
+      setIsSticky(true)
+    } else if (scrollY.current < inputPosition.current && isSticky) {
+      setIsSticky(false)
+    }
+  }
   const renderItem = useCallback(
     (item: any) => (
       <View style={styles.wrapper}>
@@ -56,7 +88,10 @@ export default function HarvestScreen() {
   const renderBody = () => {
     return (
       <>
+        <ItemList data={dogs} renderItem={renderItem} rows={2} columns={2} />
+
         <FormInput
+          onLayoutEvent={handlePositionInput}
           containerStyle={{
             marginTop: 0,
             backgroundColor: 'transparent',
@@ -65,13 +100,7 @@ export default function HarvestScreen() {
           }}
           placeholder={R.strings().search_seasons_and_flower_type}
           leftIcon={images.ic_search}
-          onPress={() =>
-            NavigationUtil.navigate(SCREEN_ROUTER_APP.WORK, {
-              changeIndex: Math.floor(Math.random() * 7),
-            })
-          }
         />
-        <ItemList data={dogs} renderItem={renderItem} rows={2} columns={2} />
         <TouchableOpacity
           style={[
             styles.wrapperBtnDay,
@@ -154,7 +183,13 @@ export default function HarvestScreen() {
   }
   const renderHeader = () => {
     return (
-      <View style={[styles.wrapperHeader, { paddingTop: insets.top + 8 }]}>
+      <View
+        onLayout={onLayoutHeader}
+        style={[
+          styles.wrapperHeader,
+          { paddingTop: insets.top + 8, zIndex: 10 },
+        ]}
+      >
         <View
           style={[styles.wrapperLogo, { borderColor: theme.colors.primary }]}
         >
@@ -171,16 +206,59 @@ export default function HarvestScreen() {
             <FastImage source={images.ic_bell} style={styles.imgBell} />
           </View>
         </View>
+        {renderSticky()}
       </View>
+    )
+  }
+  const renderSticky = () => {
+    if (!isSticky) return null
+    return (
+      <View
+        style={{
+          top: heightHeader.current,
+          position: 'absolute',
+          width: WIDTH,
+          backgroundColor: 'white',
+          paddingBottom: 6,
+          borderBottomWidth: 1,
+          borderBottomColor: '#DCDFE5',
+        }}
+      >
+        <FormInput
+          containerStyle={{
+            marginTop: 0,
+            backgroundColor: 'transparent',
+            borderRadius: 8,
+            paddingHorizontal: 16,
+            // padding: 16,
+          }}
+          // inputStyle={{ backgroundColor: 'white' }}
+          placeholder={R.strings().search_seasons_and_flower_type}
+          leftIcon={images.ic_search}
+        />
+      </View>
+    )
+  }
+  const renderFab = () => {
+    return (
+      <DraggableView color="#F1A12A">
+        <FastImage
+          source={images.ic_headPhone}
+          tintColor={'white'}
+          style={{ height: 32, width: 32 }}
+        />
+      </DraggableView>
     )
   }
   return (
     <ScreenWrapper
+      onScrollHandle={onScrollHandle}
       isLoading={loading}
       styles={styles.container}
       header={renderHeader()}
       children={renderBody()}
       scroll
+      renderComponent={renderFab()}
     />
   )
 }

@@ -17,31 +17,20 @@ const SplashScreen = (props: any) => {
     }, 1000)
   }, [])
   const checkLogin = async () => {
-    const [token, is_login] = await Promise.all([
-      AsyncStorageService.getToken(),
-      AsyncStorageService.load('is_login'),
-    ])
-    if (!token) {
-      if (!Number(is_login)) {
-        props.navigation.reset({
-          index: 0,
-          routes: [{ name: SCREEN_ROUTER_AUTH.WELLCOME }],
-        })
-      } else
-        props.navigation.reset({
-          index: 0,
-          routes: [{ name: SCREEN_ROUTER_AUTH.LOGIN }],
-          // routes: [{ name: SCREEN_ROUTER_APP.TEST }],
-          // routes: [{ name: SCREEN_ROUTER.MAIN }],
-        })
-    } else {
+    const is_login = await AsyncStorageService.load('is_login')
+
+    if (!Number(is_login)) {
+      props.navigation.reset({
+        index: 0,
+        routes: [{ name: SCREEN_ROUTER_AUTH.WELLCOME }],
+      })
+    } else
       props.navigation.reset({
         index: 0,
         // routes: [{ name: SCREEN_ROUTER_AUTH.LOGIN }],
         // routes: [{ name: SCREEN_ROUTER_APP.TEST }],
         routes: [{ name: SCREEN_ROUTER.MAIN }],
       })
-    }
   }
 
   return (

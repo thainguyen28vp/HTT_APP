@@ -1,5 +1,6 @@
 import {
   ImageRequireSource,
+  LayoutChangeEvent,
   StyleProp,
   StyleSheet,
   Text,
@@ -32,6 +33,7 @@ interface FormInputProps extends TextInputProps {
   editable?: boolean
   onPress?: TouchableOpacityProps['onPress']
   backGroundColor?: string
+  onLayoutEvent?: (event: LayoutChangeEvent) => void
 }
 
 const FormInput = (props: FormInputProps) => {
@@ -52,12 +54,14 @@ const FormInput = (props: FormInputProps) => {
     onPressRightIcon,
     onPress,
     backGroundColor,
+    onLayoutEvent,
+
     ...inputProps
   } = props
   const Component = !!onPress ? TouchableOpacity : View
 
   return (
-    <View style={[styles.container, containerStyle]}>
+    <View style={[styles.container, containerStyle]} onLayout={onLayoutEvent}>
       {!!label && (
         <View style={styles.labelContainer}>
           <Text

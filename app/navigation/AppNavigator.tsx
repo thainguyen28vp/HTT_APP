@@ -1,13 +1,9 @@
 import React from 'react'
 import { NavigationContainer } from '@react-navigation/native'
 import {
-  CardStyleInterpolators,
-  createStackNavigator,
-  StackCardInterpolationProps,
-  StackHeaderInterpolationProps,
-  TransitionPresets,
-  TransitionSpecs,
-} from '@react-navigation/stack'
+  createNativeStackNavigator,
+  NativeStackNavigationOptions,
+} from '@react-navigation/native-stack'
 import NavigationUtil from './NavigationUtil'
 import { ROOT_STACK, SCREEN_ROUTER } from '@config/screenType'
 import {
@@ -19,24 +15,27 @@ import {
 import Tabs from './tab/Tabs'
 import GlobalAlert from '@app/components/GlobalAlert'
 import GlobalConfirm from '@app/components/GlobalConfirm'
-import { Easing } from 'react-native'
+import { Easing, Platform } from 'react-native'
 
 const { MAIN } = SCREEN_ROUTER
 
-const RootStack = createStackNavigator()
-const screenOptions = {
-  ...TransitionPresets.ModalFadeTransition,
+const RootStack = createNativeStackNavigator()
+const screenOptions: NativeStackNavigationOptions = {
+  animation: 'fade',
   headerShown: false,
-  cardStyle: { backgroundColor: 'transparent' },
-  cardOverlayEnabled: true,
 }
+const optionsModal: NativeStackNavigationOptions = {
+  gestureEnabled: false,
+  presentation: 'transparentModal',
+  contentStyle: { backgroundColor: 'rgba(0,0,0,0.5)' },
+}
+
 const AppNavigator = () => {
   const MainApp = () => {
     return (
       <AuthStack.Navigator
         screenOptions={{
           headerShown: false,
-          ...TransitionPresets.SlideFromRightIOS,
         }}
       >
         {StackAuthScreen()}
@@ -59,18 +58,12 @@ const AppNavigator = () => {
         <RootStack.Screen
           name={ROOT_STACK.GLOBAL_ALERT}
           component={GlobalAlert}
-          options={{
-            gestureEnabled: false,
-            presentation: 'transparentModal',
-          }}
+          options={optionsModal}
         />
         <RootStack.Screen
           name={ROOT_STACK.GLOBAL_CONFIRM}
           component={GlobalConfirm}
-          options={{
-            gestureEnabled: false,
-            presentation: 'transparentModal',
-          }}
+          options={optionsModal}
         />
       </RootStack.Navigator>
     </NavigationContainer>

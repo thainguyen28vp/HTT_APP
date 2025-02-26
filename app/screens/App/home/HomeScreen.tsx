@@ -222,7 +222,7 @@ const HomeScreen = () => {
           maxToRenderPerBatch={4}
           windowSize={3}
           updateCellsBatchingPeriod={100}
-          decelerationRate="fast"
+          // decelerationRate="fast"
           disableIntervalMomentum={true}
           refreshControl={
             <RefreshControl

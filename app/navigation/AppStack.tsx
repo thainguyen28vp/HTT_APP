@@ -1,9 +1,5 @@
 import React from 'react'
-import {
-  createStackNavigator,
-  StackCardInterpolationProps,
-  TransitionSpecs,
-} from '@react-navigation/stack'
+import { createNativeStackNavigator } from '@react-navigation/native-stack'
 import HomeScreen from '@app/screens/App/home/HomeScreen'
 import { SCREEN_ROUTER_AUTH, SCREEN_ROUTER_APP } from '@app/config/screenType'
 import LoginScreen from '@app/screens/Auth/login/LoginScreen'
@@ -19,6 +15,7 @@ import WellcomeScreen from '@app/screens/WellcomeScreen'
 import CropInfoScreen from '@app/screens/App/cropInfo/CropInfoScreen'
 import WorkDetails from '@app/screens/App/work/WorkDetails'
 import HarvestScreen from '@app/screens/App/harvest/HarvestScreen'
+import QrScanScreen from '@app/screens/App/qrScanScreens.tsx/QrScanScreen'
 
 const { SPLASH, LOGIN, REGISTER, WELLCOME } = SCREEN_ROUTER_AUTH
 const {
@@ -32,6 +29,7 @@ const {
   CROP_INFO,
   WORK,
   WORK_DETAILS,
+  QR_SCAN,
 } = SCREEN_ROUTER_APP
 
 const AUTH_STACK = {
@@ -44,6 +42,7 @@ const AUTH_STACK = {
 const APP_STACK = {
   [HOME]: HomeScreen,
   [WORK]: WorkScreen,
+  [QR_SCAN]: QrScanScreen,
   [HAVEST]: HarvestScreen,
   [TEST]: Test,
   [UPDATE_INFO]: AccountInfoScreen,
@@ -54,14 +53,14 @@ const APP_STACK = {
   [WORK_DETAILS]: WorkDetails,
 }
 
-const forFade = ({ current }: StackCardInterpolationProps) => ({
+const forFade = ({ current }: any) => ({
   cardStyle: {
     opacity: current.progress,
   },
 })
 
-const MainStack = createStackNavigator()
-const AuthStack = createStackNavigator()
+const MainStack = createNativeStackNavigator()
+const AuthStack = createNativeStackNavigator()
 
 const StackAuthScreen = () => {
   return (
@@ -71,7 +70,7 @@ const StackAuthScreen = () => {
           return (
             <AuthStack.Screen
               options={{
-                cardStyleInterpolator: forFade,
+                animation: 'fade',
               }}
               key={index}
               name={item}

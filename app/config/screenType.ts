@@ -15,6 +15,7 @@ export const MAIN_TAB = {
   WORK: 'WORK',
   ACCOUNT: 'ACCOUNT',
   HAVEST: 'HAVEST',
+  QR_SCAN: 'QR_SCAN',
 }
 
 export const SCREEN_ROUTER_AUTH = {
@@ -27,6 +28,7 @@ export const SCREEN_ROUTER_AUTH = {
 export const SCREEN_ROUTER_APP = {
   HOME: 'HOME',
   HAVEST: 'HAVEST',
+  QR_SCAN: 'QR_SCAN',
   WORK: 'WORK',
   TEST: 'TEST',
   UPDATE_INFO: 'UPDATE_INFO',

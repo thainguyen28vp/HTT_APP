@@ -11,7 +11,8 @@
     "pod": "cd ios && pod install && cd ..",
     "cleanGradlew": "cd android && ./gradlew clean && cd ..",
     "apk": "cd android && ./gradlew assembleRelease",
-    "aab": "cd android && ./gradlew bundleRelease"
+    "aab": "cd android && ./gradlew bundleRelease",
+    "iosRelease": " react-native run-ios --mode Release"
   },
   "dependencies": {
     "@d11/react-native-fast-image": "^8.9.0",
@@ -27,7 +28,6 @@
     "@react-navigation/bottom-tabs": "^7.2.0",
     "@react-navigation/native": "^7.0.14",
     "@react-navigation/native-stack": "^7.2.0",
-    "@react-navigation/stack": "^7.1.1",
     "@reduxjs/toolkit": "^2.5.0",
     "@types/jest": "^29.5.14",
     "axios": "^1.7.9",
@@ -60,6 +60,7 @@
     "react-native-screens": "^4.4.0",
     "react-native-tab-view": "^4.0.5",
     "react-native-video": "^6.10.0",
+    "react-native-vision-camera": "^4.6.4",
     "react-redux": "^9.2.0",
     "yup": "^1.6.1"
   },

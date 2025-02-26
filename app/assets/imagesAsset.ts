@@ -41,6 +41,8 @@ const images = {
   ic_heart_bold: require('./images/ic_heart_bold.png'),
   ic_zoom_out: require('./images/ic_zoom_out.png'),
   ic_enlarge: require('./images/ic_enlarge.png'),
+  ic_headPhone: require('./images/ic_headPhone.png'),
+  qrScan: require('./images/qrScan.json'),
   // ic_male: require('./images/ic_male.png'),
   // ic_female: require('./images/ic_female.png'),
 }
