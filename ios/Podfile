@@ -20,7 +20,7 @@ node_require('react-native-permissions/scripts/setup.rb')
 platform :ios, min_ios_version_supported
 prepare_react_native_project!
 
-setup_permissions(['Camera', 'PhotoLibrary'])
+setup_permissions(['Camera', 'PhotoLibrary', 'LocationWhenInUse'])
 
 linkage = ENV['USE_FRAMEWORKS']
 if linkage != nil
@@ -29,6 +29,8 @@ if linkage != nil
 end
 
 target 'HTT_APP' do
+  rn_maps_path = '../node_modules/react-native-maps'
+  pod 'react-native-google-maps', :path => rn_maps_path
   config = use_native_modules!
 
   pod 'Firebase', :modular_headers => true

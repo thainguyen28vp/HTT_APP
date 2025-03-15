@@ -43,6 +43,7 @@ const images = {
   ic_enlarge: require('./images/ic_enlarge.png'),
   ic_headPhone: require('./images/ic_headPhone.png'),
   qrScan: require('./images/qrScan.json'),
+  ic_map: require('./images/ic_map.png'),
   // ic_male: require('./images/ic_male.png'),
   // ic_female: require('./images/ic_female.png'),
 }

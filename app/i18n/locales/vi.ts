@@ -61,6 +61,8 @@ export default {
     'Bạn đã tắt quyền truy cập camera. Hãy vào cài đặt => quyền riêng tư => bật quyền truy cập camera',
   permission_library:
     'Bạn đã tắt quyền truy cập thư viện ảnh. Hãy vào cài đặt => quyền riêng tư => bật quyền truy cập thư viện ảnh',
+  permission_location:
+    'Bạn đã tắt quyền truy cập thư viện ảnh. Hãy vào cài đặt => quyền riêng tư => bật quyền truy cập vị trí',
   garden_info: 'Thông tin vườn',
   garden_staff: 'Nhân viên vườn',
   garden_staff_list: 'Danh sách nhân viên',

@@ -16,6 +16,7 @@ import {
 import { HEIGHT, WIDTH } from '@app/theme'
 import { showMessages } from '@app/utils/GlobalAlertHelper'
 import { useIsFocused } from '@react-navigation/native'
+import { requestPermissionCamera } from '@app/utils/AppPermissions'
 
 const scanAreaSize = WIDTH * 0.65
 
@@ -24,6 +25,11 @@ const QrScanScreen = () => {
   const isTabActive = useIsFocused()
   const hasPermission = useCameraPermission()
   const isCheck = useRef(false)
+
+  useEffect(() => {
+    requestPermissionCamera()
+  }, [hasPermission])
+
   const codeScanner = useCodeScanner({
     codeTypes: ['qr', 'ean-13'],
     onCodeScanned: codes => {
@@ -35,9 +41,20 @@ const QrScanScreen = () => {
       )
     },
   })
-  console.log(hasPermission)
 
-  if (!device) return <View style={{ flex: 1, backgroundColor: 'black' }} />
+  if (!device)
+    return (
+      <View
+        style={{
+          flex: 1,
+          // backgroundColor: 'black',
+          justifyContent: 'center',
+          alignItems: 'center',
+        }}
+      >
+        <Text>Thiet bi k kha dung</Text>
+      </View>
+    )
   return (
     <View style={styles.container}>
       <Camera

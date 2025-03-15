@@ -199,9 +199,16 @@ export default function HarvestScreen() {
           Vườn Lạc Dương
         </Text>
         <View style={styles.wrapperIcon}>
-          <View style={styles.wrapperChat}>
-            <FastImage source={images.ic_chat} style={styles.imgBell} />
-          </View>
+          <TouchableOpacity
+            onPress={() => NavigationUtil.navigate(SCREEN_ROUTER_APP.MAP)}
+            style={styles.wrapperChat}
+          >
+            <FastImage
+              source={images.ic_map}
+              style={styles.imgBell}
+              tintColor={'#F1A12A'}
+            />
+          </TouchableOpacity>
           <View style={[styles.wrapperChat, { marginLeft: 8 }]}>
             <FastImage source={images.ic_bell} style={styles.imgBell} />
           </View>

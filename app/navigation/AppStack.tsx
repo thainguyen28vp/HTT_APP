@@ -16,6 +16,7 @@ import CropInfoScreen from '@app/screens/App/cropInfo/CropInfoScreen'
 import WorkDetails from '@app/screens/App/work/WorkDetails'
 import HarvestScreen from '@app/screens/App/harvest/HarvestScreen'
 import QrScanScreen from '@app/screens/App/qrScanScreens.tsx/QrScanScreen'
+import MapScreen from '@app/screens/App/map/MapScreen'
 
 const { SPLASH, LOGIN, REGISTER, WELLCOME } = SCREEN_ROUTER_AUTH
 const {
@@ -30,6 +31,7 @@ const {
   WORK,
   WORK_DETAILS,
   QR_SCAN,
+  MAP,
 } = SCREEN_ROUTER_APP
 
 const AUTH_STACK = {
@@ -44,6 +46,7 @@ const APP_STACK = {
   [WORK]: WorkScreen,
   [QR_SCAN]: QrScanScreen,
   [HAVEST]: HarvestScreen,
+  [MAP]: MapScreen,
   [TEST]: Test,
   [UPDATE_INFO]: AccountInfoScreen,
   [CHANGE_PASSWORD]: ChangePasswordScreen,
@@ -52,12 +55,6 @@ const APP_STACK = {
   [CROP_INFO]: CropInfoScreen,
   [WORK_DETAILS]: WorkDetails,
 }
-
-const forFade = ({ current }: any) => ({
-  cardStyle: {
-    opacity: current.progress,
-  },
-})
 
 const MainStack = createNativeStackNavigator()
 const AuthStack = createNativeStackNavigator()

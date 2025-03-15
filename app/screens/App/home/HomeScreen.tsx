@@ -24,7 +24,6 @@ import { CameraRoll } from '@react-native-camera-roll/camera-roll'
 import Toast from 'react-native-root-toast'
 import { OS } from '@app/theme'
 import { requestPermissionWriteLibrary } from '@app/utils/AppPermissions'
-import reactotron from 'ReactotronConfig'
 
 interface Video {
   url: string
@@ -80,8 +79,6 @@ const HomeScreen = () => {
   }, [])
 
   const fetchVideos = useCallback(async () => {
-    reactotron.log('dddddddddaaaaaaaa', page)
-
     if (!hasMoreData) {
       return
     }
@@ -179,7 +176,10 @@ const HomeScreen = () => {
       // setProgress(0)
     }
   }
-
+  const onLoadMore = () => {
+    if (!videos.length) return
+    setPage(prev => prev + 1)
+  }
   const renderVideoItem = useCallback(
     ({ item }: { item: Video }) => {
       return (
@@ -223,7 +223,7 @@ const HomeScreen = () => {
           windowSize={3}
           updateCellsBatchingPeriod={100}
           // decelerationRate="fast"
-          disableIntervalMomentum={true}
+          // disableIntervalMomentum={true}
           refreshControl={
             <RefreshControl
               refreshing={isRefreshing}
@@ -232,7 +232,8 @@ const HomeScreen = () => {
               progressBackgroundColor="#FFFFFF"
             />
           }
-          onEndReached={() => setPage(prev => prev + 1)}
+          // onEndReached={() => setPage(prev => prev + 1)}
+          onEndReached={onLoadMore}
           ListFooterComponent={ListFooterComponent}
         />
         <Portal>

@@ -1,11 +1,13 @@
 #import "AppDelegate.h"
 #import <Firebase.h>
 #import <React/RCTBundleURLProvider.h>
+#import <GoogleMaps/GoogleMaps.h>
 
 @implementation AppDelegate
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
+  [GMSServices provideAPIKey:@"AIzaSyBVapGkMrmJA7zf1paLbFecPyE5E6FXMCA"];
   [FIRApp configure];
   self.moduleName = @"HTT_APP";
   // You can add your custom initial props in the dictionary below.

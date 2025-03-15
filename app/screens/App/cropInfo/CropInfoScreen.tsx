@@ -17,7 +17,7 @@ const WorkScreen = () => {
     { key: 'harvest', title: R.strings().harvest },
   ])
   const renderScene = SceneMap({
-    info: () => <GeneralInfoTab />,
+    info: GeneralInfoTab,
     plant: PlantTab,
     harvest: HarvestTab,
   })
@@ -33,7 +33,8 @@ const WorkScreen = () => {
         inactiveColor="#666666"
         pressColor="transparent"
         tabStyle={styles.tab}
-        // gap={}
+        // renderTabBarItem={() => <></>}
+        // renderTabBarItem={({ route, focused }) => <Text>{route.title}</Text>}
       />
     </View>
   )
@@ -53,6 +54,7 @@ const WorkScreen = () => {
       titleHeader="Vụ mùa thứ 2"
       renderRightComponentHeader={renderRightComponentHeader()}
       titlePosition="left"
+      // onBack={}
     >
       <TabView
         navigationState={{ index, routes }}
@@ -94,3 +96,37 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
   },
 })
+
+// import * as React from 'react'
+// import { View, useWindowDimensions } from 'react-native'
+// import { TabView, SceneMap, TabBar } from 'react-native-tab-view'
+
+// const renderScene = SceneMap({
+//   first: () => <></>,
+//   second: () => <></>,
+// })
+
+// const routes = [
+//   { key: 'first', title: 'First' },
+//   { key: 'second', title: 'Second' },
+// ]
+
+// export default function TabViewExample() {
+//   const layout = useWindowDimensions()
+//   const [index, setIndex] = React.useState(0)
+
+//   return (
+//     <TabView
+//       navigationState={{ index, routes }}
+//       renderScene={renderScene}
+//       onIndexChange={setIndex}
+//       renderTabBar={props => {
+//         console.log(props)
+
+//         return <TabBar {...props} />
+//       }}
+//       tabBarPosition="bottom"
+//       initialLayout={{ width: layout.width }}
+//     />
+//   )
+// }

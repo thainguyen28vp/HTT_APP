@@ -24,7 +24,8 @@
       "@assets/*": ["./app/assets/*"],
       "@hooks/*": ["./app/hooks/*"],
       "@store/*": ["./app/store/*"],
-      "@service/*": ["./app/service/*"]
+      "@service/*": ["./app/service/*"],
+      "@common": ["./app/common"]
     }
   },
   "exclude": [

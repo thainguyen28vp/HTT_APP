@@ -16,6 +16,7 @@ function strings() {
     username: i18n.t('username'),
     password: i18n.t('password'),
     enter_username: i18n.t('enter_username'),
+    permission_location: i18n.t('permission_location'),
     enter_password: i18n.t('enter_password'),
     or: i18n.t('or'),
     no_account: i18n.t('no_account'),

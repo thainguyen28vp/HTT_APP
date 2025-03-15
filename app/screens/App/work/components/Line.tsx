@@ -1,6 +1,7 @@
 import { StyleSheet, Text, View } from 'react-native'
 import React from 'react'
 import { useTheme } from '@app/context/ThemeContext'
+import { scale, verticalScale, moderateScale } from '@common'
 interface ILine {
   title: string
   content: string
@@ -27,11 +28,11 @@ const styles = StyleSheet.create({
   },
   txtTitle: {
     width: '50%',
-    fontSize: 14,
+    fontSize: moderateScale(14),
     fontWeight: '400',
   },
   txtContent: {
-    fontSize: 16,
+    fontSize: moderateScale(16),
     fontWeight: '600',
     width: '50%',
     textAlign: 'right',
